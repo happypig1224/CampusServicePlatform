@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shxy.w202350766.suiestation.mapper.ErrandReviewMapper">
+
+    <resultMap id="BaseResultMap" type="com.shxy.w202350766.campusserviceplatform.domain.ErrandReview">
+            <id property="id" column="id" />
+            <result property="taskId" column="task_id" />
+            <result property="reviewerId" column="reviewer_id" />
+            <result property="revieweeId" column="reviewee_id" />
+            <result property="rating" column="rating" />
+            <result property="content" column="content" />
+            <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,task_id,reviewer_id,reviewee_id,rating,content,
+        create_time
+    </sql>
+</mapper>

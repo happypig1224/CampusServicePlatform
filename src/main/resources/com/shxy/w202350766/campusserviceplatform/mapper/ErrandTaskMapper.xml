@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shxy.w202350766.suiestation.mapper.ErrandTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.shxy.w202350766.campusserviceplatform.domain.ErrandTask">
+            <id property="id" column="id" />
+            <result property="userId" column="user_id" />
+            <result property="type" column="type" />
+            <result property="title" column="title" />
+            <result property="description" column="description" />
+            <result property="reward" column="reward" />
+            <result property="locationFrom" column="location_from" />
+            <result property="locationTo" column="location_to" />
+            <result property="deadline" column="deadline" />
+            <result property="contactInfo" column="contact_info" />
+            <result property="status" column="status" />
+            <result property="acceptorId" column="acceptor_id" />
+            <result property="acceptTime" column="accept_time" />
+            <result property="completeTime" column="complete_time" />
+            <result property="proofImages" column="proof_images" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,type,title,description,reward,
+        location_from,location_to,deadline,contact_info,status,
+        acceptor_id,accept_time,complete_time,proof_images,create_time,
+        update_time
+    </sql>
+</mapper>

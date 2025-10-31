@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shxy.w202350766.suiestation.mapper.ChatSessionMemberMapper">
+
+    <resultMap id="BaseResultMap" type="com.shxy.w202350766.campusserviceplatform.domain.ChatSessionMember">
+            <id property="id" column="id" />
+            <result property="sessionId" column="session_id" />
+            <result property="userId" column="user_id" />
+            <result property="nickname" column="nickname" />
+            <result property="role" column="role" />
+            <result property="joinTime" column="join_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,session_id,user_id,nickname,role,join_time
+    </sql>
+</mapper>
