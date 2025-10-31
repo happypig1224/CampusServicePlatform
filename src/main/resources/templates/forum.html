@@ -4,390 +4,482 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>校园论坛 - 绥E站</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/modern-style.css">
+    <link rel="stylesheet" href="/css/animations.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- 头部导航 -->
-    <header class="header">
-        <div class="container">
-            <nav class="navbar">
-                <a href="/" class="logo">绥E站</a>
-                
-                <ul class="nav-links">
-                    <li><a href="/">首页</a></li>
-                    <li><a href="/forum" class="active">校园论坛</a></li>
-                    <li><a href="/market">二手市场</a></li>
-                    <li><a href="/lost-found">失物招领</a></li>
-                    <li><a href="/errand">校园跑腿</a></li>
-                    <li><a href="/resource">资源共享</a></li>
-                </ul>
-                
-                <div class="user-menu">
-                    <a href="/login" class="btn btn-primary">登录</a>
-                    <a href="/register" class="btn btn-outline">注册</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+<!-- 头部导航 -->
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <a href="/" class="logo">绥E站</a>
 
-    <!-- 主要内容区 -->
-    <main class="main-content">
-        <div class="container">
-            <div class="row">
-                <!-- 左侧版块列表 -->
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">论坛版块</h5>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="list-group list-group-flush" id="sectionList">
-                                <!-- 版块列表将通过JavaScript动态加载 -->
-                                <div class="text-center py-3">
-                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                        <span class="visually-hidden">加载中...</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <ul class="nav-links">
+                <li><a href="/">首页</a></li>
+                <li><a href="/forum" class="active">校园论坛</a></li>
+                <li><a href="/market">二手市场</a></li>
+                <li><a href="/lost-found">失物招领</a></li>
+                <li><a href="/errand">校园跑腿</a></li>
+                <li><a href="/resource">资源共享</a></li>
+            </ul>
+
+            <div class="user-menu">
+                <a href="/login" class="btn btn-primary">登录</a>
+                <a href="/register" class="btn btn-outline">注册</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- 主要内容区 -->
+<main class="main-content">
+    <div class="container">
+        <div class="row">
+            <!-- 论坛版块 -->
+            <div class="col-md-3 animate-slide-in-left">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="bi bi-collection-fill animate-pulse me-2"></i>论坛版块</h5>
                     </div>
-                    
-                    <!-- 热门帖子 -->
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">热门帖子</h5>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="list-group list-group-flush" id="hotPostsList">
-                                <!-- 热门帖子将通过JavaScript动态加载 -->
-                                <div class="text-center py-3">
-                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                        <span class="visually-hidden">加载中...</span>
-                                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="sectionList">
+                            <!-- 版块列表将通过JavaScript动态加载 -->
+                            <div class="text-center py-4">
+                                <div class="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 中间帖子列表 -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="card-title mb-0" id="sectionTitle">全部帖子</h5>
-                                <div class="d-flex">
-                                    <select class="form-select form-select-sm me-2" id="sortSelect">
-                                        <option value="latest">最新发布</option>
-                                        <option value="hot">最热门</option>
-                                        <option value="essence">精华帖</option>
-                                    </select>
-                                    <button class="btn btn-primary btn-sm" id="newPostBtn">发新帖</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <!-- 搜索栏 -->
-                            <div class="p-3 border-bottom">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="搜索帖子..." id="searchInput">
-                                    <button class="btn btn-outline-secondary" type="button" id="searchBtn">
-                                        <i class="bi bi-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- 帖子列表 -->
-                            <div class="post-list" id="postList">
-                                <!-- 帖子列表将通过JavaScript动态加载 -->
-                                <div class="text-center py-5">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">加载中...</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- 分页 -->
-                            <div class="p-3 border-top">
-                                <nav aria-label="帖子分页">
-                                    <ul class="pagination pagination-sm justify-content-center mb-0" id="pagination">
-                                        <!-- 分页将通过JavaScript动态生成 -->
-                                    </ul>
-                                </nav>
+                                <p class="text-muted mt-2">正在加载版块...</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- 右侧信息 -->
-                <div class="col-md-3">
-                    <!-- 论坛统计 -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">论坛统计</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>帖子总数</span>
-                                <span id="totalPosts">-</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>今日发帖</span>
-                                <span id="todayPosts">-</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span>注册用户</span>
-                                <span id="totalUsers">-</span>
-                            </div>
-                        </div>
+
+                <!-- 热门帖子 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><i class="bi bi-fire animate-pulse me-2"></i>热门帖子</h5>
                     </div>
-                    
-                    <!-- 最新回复 -->
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">最新回复</h5>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="list-group list-group-flush" id="recentRepliesList">
-                                <!-- 最新回复将通过JavaScript动态加载 -->
-                                <div class="text-center py-3">
-                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
-                                        <span class="visually-hidden">加载中...</span>
-                                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="hotPostList">
+                            <!-- 热门帖子将通过JavaScript动态加载 -->
+                            <div class="text-center py-3">
+                                <div class="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
                                 </div>
+                                <p class="text-muted mt-2">正在加载热门帖子...</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- 发帖模态框 -->
-    <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="newPostModalLabel">发表新帖</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- 中间帖子列表 -->
+            <div class="col-md-6 animate-slide-in-right">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0" id="sectionTitle"><i class="bi bi-list-ul animate-pulse me-2"></i>全部帖子</h5>
+                            <div class="d-flex">
+                                <select class="form-select form-select-sm me-2" id="sortSelect">
+                                    <option value="latest">最新发布</option>
+                                    <option value="hot">最热门</option>
+                                    <option value="essence">精华帖</option>
+                                </select>
+                                <button class="btn btn-primary btn-sm btn-ripple" id="newPostBtn">
+                                    <i class="bi bi-plus-circle-fill"></i> 发布新帖
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <!-- 搜索栏 -->
+                        <div class="p-3 border-bottom">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="搜索帖子..." id="searchInput">
+                                <button class="btn btn-outline-secondary" type="button" id="searchBtn">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 帖子列表 -->
+                        <div class="post-list" id="postList">
+                            <!-- 帖子列表将通过JavaScript动态加载 -->
+                            <div class="text-center py-4">
+                                <div class="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <p class="text-muted mt-2">正在加载帖子...</p>
+                            </div>
+                        </div>
+
+                        <!-- 分页 -->
+                        <div class="p-3 border-top">
+                            <nav aria-label="帖子分页">
+                                <ul class="pagination pagination-sm justify-content-center mb-0" id="pagination">
+                                    <!-- 分页将通过JavaScript动态生成 -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="newPostForm">
-                        <div class="mb-3">
-                            <label for="postSection" class="form-label">选择版块</label>
-                            <select class="form-select" id="postSection" name="sectionId" required>
-                                <option value="">请选择版块</option>
-                                <!-- 版块选项将通过JavaScript动态加载 -->
-                            </select>
+            </div>
+
+            <!-- 右侧热门帖子 -->
+            <div class="col-md-3 animate-slide-in-right animate-delay-1">
+                <!-- 论坛统计 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">论坛统计</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>帖子总数</span>
+                            <span id="totalPosts">-</span>
                         </div>
-                        <div class="mb-3">
-                            <label for="postTitle" class="form-label">标题</label>
-                            <input type="text" class="form-control" id="postTitle" name="title" required>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>今日发帖</span>
+                            <span id="todayPosts">-</span>
                         </div>
-                        <div class="mb-3">
-                            <label for="postContent" class="form-label">内容</label>
-                            <textarea class="form-control" id="postContent" name="content" rows="10" required></textarea>
+                        <div class="d-flex justify-content-between">
+                            <span>注册用户</span>
+                            <span id="totalUsers">-</span>
                         </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" id="submitPostBtn">发布</button>
+
+                <!-- 最新回复 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">最新回复</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="recentRepliesList">
+                            <!-- 最新回复将通过JavaScript动态加载 -->
+                            <div class="text-center py-3">
+                                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                    <span class="visually-hidden">加载中...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/app.js"></script>
-    <script>
-        // 全局变量
-        let currentSection = null;
-        let currentPage = 1;
-        let currentSort = 'latest';
-        let currentKeyword = '';
-        
-        // 页面初始化函数
-        function pageInit() {
-            // 加载版块列表
-            loadSections();
-            
-            // 加载热门帖子
-            loadHotPosts();
-            
-            // 加载最新回复
-            loadRecentReplies();
-            
-            // 加载论坛统计
-            loadForumStats();
-            
-            // 加载帖子列表
+<!-- 发帖模态框 -->
+<div class="modal fade modal-slide-up" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newPostModalLabel">发表新帖</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newPostForm">
+                    <div class="mb-3">
+                        <label for="postSection" class="form-label">选择版块</label>
+                        <select class="form-select" id="postSection" name="sectionId">
+                            <option value="">请选择版块</option>
+                            <!-- 版块选项将通过JavaScript动态加载 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="postTitle" class="form-label">标题</label>
+                        <input type="text" class="form-control" id="postTitle" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="postContent" class="form-label">内容</label>
+                        <textarea class="form-control" id="postContent" name="content" rows="10" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-ripple" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary btn-ripple btn-shine" id="submitPostBtn">发布</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 帖子详情模态框 -->
+<div class="modal fade" id="postDetailModal" tabindex="-1" aria-labelledby="postDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="postDetailModalLabel">帖子详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="postDetailContent">
+                    <!-- 帖子详情内容将在这里动态渲染 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/app.js"></script>
+<script>
+    // 全局变量
+    let currentSection = null;
+    let currentPage = 1;
+    let currentSort = 'latest';
+    let currentKeyword = '';
+
+    // 页面初始化函数
+    function pageInit() {
+        // 检查登录状态并更新用户菜单
+        checkLoginStatus();
+
+        // 初始化论坛页面
+        initForumPage();
+    }
+
+    // 绑定事件
+    function bindEvents() {
+        // 排序选择
+        document.getElementById('sortSelect').addEventListener('change', function() {
+            currentSort = this.value;
+            currentPage = 1;
             loadPosts();
-            
-            // 绑定事件
-            bindEvents();
-        }
-        
-        // 绑定事件
-        function bindEvents() {
-            // 排序选择
-            document.getElementById('sortSelect').addEventListener('change', function() {
-                currentSort = this.value;
+        });
+
+        // 搜索
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            currentKeyword = document.getElementById('searchInput').value.trim();
+            currentPage = 1;
+            loadPosts();
+        });
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                currentKeyword = this.value.trim();
                 currentPage = 1;
                 loadPosts();
-            });
-            
-            // 搜索
-            document.getElementById('searchBtn').addEventListener('click', function() {
-                currentKeyword = document.getElementById('searchInput').value.trim();
-                currentPage = 1;
-                loadPosts();
-            });
-            
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    currentKeyword = this.value.trim();
-                    currentPage = 1;
-                    loadPosts();
-                }
-            });
-            
-            // 发帖按钮
-            document.getElementById('newPostBtn').addEventListener('click', function() {
-                // 检查用户是否登录
-                if (!localStorage.getItem('token')) {
-                    showMessage('请先登录后再发帖', 'warning');
-                    setTimeout(() => {
-                        window.location.href = '/login';
-                    }, 1000);
-                    return;
-                }
-                
-                // 打开发帖模态框
-                const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
-                modal.show();
-                
-                // 加载版块选项
-                loadSectionOptions();
-            });
-            
-            // 提交帖子
-            document.getElementById('submitPostBtn').addEventListener('click', submitPost);
-        }
-        
-        // 加载版块列表
-        async function loadSections() {
-            try {
-                const sections = await get('/forum/sections');
-                renderSections(sections);
-            } catch (error) {
-                console.error('加载版块列表失败:', error);
-                document.getElementById('sectionList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
             }
+        });
+
+        // 发帖按钮
+        document.getElementById('newPostBtn').addEventListener('click', function() {
+            // 检查用户是否登录
+            if (!localStorage.getItem('token')) {
+                showMessage('请先登录后再发帖', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+                return;
+            }
+
+            // 打开发帖模态框
+            const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
+            modal.show();
+
+            // 加载版块选项
+            loadSectionOptions();
+        });
+
+        // 提交帖子
+        document.getElementById('submitPostBtn').addEventListener('click', submitPost);
+
+        // 取消按钮 - 确保模态框能正确关闭
+        document.querySelector('#newPostModal .btn-secondary[data-bs-dismiss="modal"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newPostModal'));
+            if (modal) {
+                modal.hide();
+            } else {
+                // 如果无法获取实例，使用备用方法
+                const modalElement = document.getElementById('newPostModal');
+                modalElement.classList.remove('show');
+                modalElement.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }
+
+            // 重置表单
+            document.getElementById('newPostForm').reset();
+        });
+
+        // 模态框关闭事件 - 确保关闭后清理
+        document.getElementById('newPostModal').addEventListener('hidden.bs.modal', function() {
+            // 重置表单
+            document.getElementById('newPostForm').reset();
+
+            // 确保移除模态框相关样式
+            document.body.classList.remove('modal-open');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        });
+
+        // 帖子详情模态框关闭按钮事件处理
+        document.querySelector('#postDetailModal .btn-secondary[data-bs-dismiss="modal"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = bootstrap.Modal.getInstance(document.getElementById('postDetailModal'));
+            if (modal) {
+                modal.hide();
+            } else {
+                // 如果无法获取实例，使用备用方法
+                const modalElement = document.getElementById('postDetailModal');
+                modalElement.classList.remove('show');
+                modalElement.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
+            }
+        });
+
+        // 帖子详情模态框关闭事件 - 确保关闭后清理
+        document.getElementById('postDetailModal').addEventListener('hidden.bs.modal', function() {
+            // 清理帖子详情内容
+            document.getElementById('postDetailContent').innerHTML = '';
+
+            // 确保移除模态框相关样式
+            document.body.classList.remove('modal-open');
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+        });
+    }
+
+    // 加载版块列表
+    async function loadSections() {
+        try {
+            const response = await get('/forum/sections');
+            const sections = response.data || response;
+            console.log('Sections API response:', sections);
+            renderSections(sections);
+        } catch (error) {
+            console.error('加载版块列表失败:', error);
+            document.getElementById('sectionList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
         }
-        
-        // 渲染版块列表
-        function renderSections(sections) {
-            const container = document.getElementById('sectionList');
-            
-            // 添加"全部帖子"选项
-            let html = `
+    }
+
+    // 渲染版块列表
+    function renderSections(sections) {
+        const container = document.getElementById('sectionList');
+
+        // 添加"全部帖子"选项
+        let html = `
                 <a href="#" class="list-group-item list-group-item-action ${!currentSection ? 'active' : ''}" data-section-id="">
                     <i class="bi bi-grid-3x3-gap me-2"></i>全部帖子
                 </a>
             `;
-            
-            // 添加版块
-            sections.forEach(section => {
-                html += `
-                    <a href="#" class="list-group-item list-group-item-action ${currentSection === section.id ? 'active' : ''}" 
-                       data-section-id="${section.id}">
+
+        // 添加版块
+        sections.forEach(section => {
+            html += `
+                    <a href="#" class="list-group-item list-group-item-action ${currentSection === section.categoryId ? 'active' : ''}"
+                       data-section-id="${section.categoryId}">
                         <i class="bi ${section.icon || 'bi-folder'} me-2"></i>${section.name}
                         <span class="badge bg-secondary rounded-pill float-end">${section.postCount || 0}</span>
                     </a>
                 `;
+        });
+
+        container.innerHTML = html;
+
+        // 绑定点击事件
+        container.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // 更新活动状态
+                container.querySelectorAll('a').forEach(item => item.classList.remove('active'));
+                this.classList.add('active');
+
+                // 更新当前版块
+                currentSection = this.dataset.sectionId ? parseInt(this.dataset.sectionId) : null;
+                currentPage = 1;
+
+                // 更新标题
+                const sectionName = this.textContent.trim().split('\n')[0];
+                document.getElementById('sectionTitle').textContent = sectionName;
+
+                // 重新加载帖子
+                loadPosts();
             });
-            
-            container.innerHTML = html;
-            
-            // 绑定点击事件
-            container.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 更新活动状态
-                    container.querySelectorAll('a').forEach(item => item.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // 更新当前版块
-                    currentSection = this.dataset.sectionId ? parseInt(this.dataset.sectionId) : null;
-                    currentPage = 1;
-                    
-                    // 更新标题
-                    const sectionName = this.textContent.trim().split('\n')[0];
-                    document.getElementById('sectionTitle').textContent = sectionName;
-                    
-                    // 重新加载帖子
-                    loadPosts();
-                });
-            });
+        });
+    }
+
+    // 加载热门帖子
+    async function loadHotPosts() {
+        try {
+            const response = await get('/forum/posts/hot', { limit: 10 });
+            const posts = response.data || response;
+            renderHotPosts(posts);
+        } catch (error) {
+            console.error('加载热门帖子失败:', error);
+            document.getElementById('hotPostsList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
         }
-        
-        // 加载热门帖子
-        async function loadHotPosts() {
-            try {
-                const posts = await get('/forum/posts/hot', { limit: 10 });
-                renderHotPosts(posts);
-            } catch (error) {
-                console.error('加载热门帖子失败:', error);
-                document.getElementById('hotPostsList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
-            }
+    }
+
+    // 渲染热门帖子
+    function renderHotPosts(posts) {
+        const container = document.getElementById('hotPostsList');
+
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<div class="p-3 text-muted">暂无热门帖子</div>';
+            return;
         }
-        
-        // 渲染热门帖子
-        function renderHotPosts(posts) {
-            const container = document.getElementById('hotPostsList');
-            
-            if (!posts || posts.length === 0) {
-                container.innerHTML = '<div class="p-3 text-muted">暂无热门帖子</div>';
-                return;
-            }
-            
-            container.innerHTML = posts.map(post => `
+
+        container.innerHTML = posts.map(post => `
                 <a href="/forum/post/${post.id}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <h6 class="mb-1">${post.title}</h6>
-                        <small>${formatNumber(post.likeCount)}</small>
+                        <small>${formatNumber(post.viewCount)}</small>
                     </div>
                     <p class="mb-1 text-truncate">${post.content}</p>
                     <small>${post.sectionName} · ${formatDate(post.createTime)}</small>
                 </a>
             `).join('');
+    }
+
+    // 加载最新回复
+    async function loadRecentReplies() {
+        try {
+            const response = await get('/forum/replies/latest', { limit: 10 });
+            const replies = response.data || response;
+            renderRecentReplies(replies);
+        } catch (error) {
+            console.error('加载最新回复失败:', error);
+            document.getElementById('recentRepliesList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
         }
-        
-        // 加载最新回复
-        async function loadRecentReplies() {
-            try {
-                const replies = await get('/forum/replies/latest', { limit: 10 });
-                renderRecentReplies(replies);
-            } catch (error) {
-                console.error('加载最新回复失败:', error);
-                document.getElementById('recentRepliesList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
-            }
+    }
+
+    // 渲染最新回复
+    function renderRecentReplies(replies) {
+        const container = document.getElementById('recentRepliesList');
+
+        if (!replies || replies.length === 0) {
+            container.innerHTML = '<div class="p-3 text-muted">暂无最新回复</div>';
+            return;
         }
-        
-        // 渲染最新回复
-        function renderRecentReplies(replies) {
-            const container = document.getElementById('recentRepliesList');
-            
-            if (!replies || replies.length === 0) {
-                container.innerHTML = '<div class="p-3 text-muted">暂无最新回复</div>';
-                return;
-            }
-            
-            container.innerHTML = replies.map(reply => `
+
+        container.innerHTML = replies.map(reply => `
                 <a href="/forum/post/${reply.postId}#reply-${reply.id}" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <h6 class="mb-1">${reply.userNickname}</h6>
@@ -397,85 +489,86 @@
                     <small>回复: ${reply.postTitle}</small>
                 </a>
             `).join('');
+    }
+
+    // 加载论坛统计
+    async function loadForumStats() {
+        try {
+            const response = await get('/forum/stats');
+            const stats = response.data || response;
+            document.getElementById('totalPosts').textContent = formatNumber(stats.totalPosts || 0);
+            document.getElementById('todayPosts').textContent = formatNumber(stats.todayPosts || 0);
+            document.getElementById('totalUsers').textContent = formatNumber(stats.totalUsers || 0);
+        } catch (error) {
+            console.error('加载论坛统计失败:', error);
         }
-        
-        // 加载论坛统计
-        async function loadForumStats() {
-            try {
-                const stats = await get('/forum/stats');
-                document.getElementById('totalPosts').textContent = formatNumber(stats.totalPosts || 0);
-                document.getElementById('todayPosts').textContent = formatNumber(stats.todayPosts || 0);
-                document.getElementById('totalUsers').textContent = formatNumber(stats.totalUsers || 0);
-            } catch (error) {
-                console.error('加载论坛统计失败:', error);
-            }
-        }
-        
-        // 加载帖子列表
-        async function loadPosts() {
-            try {
-                // 显示加载状态
-                document.getElementById('postList').innerHTML = `
+    }
+
+    // 优雅的参数构建器
+    function buildPostParams() {
+        return {
+            page: currentPage,
+            limit: 10,
+            sort: currentSort,
+            ...(currentSection && { sectionId: currentSection }),
+            ...(currentKeyword && { keyword: currentKeyword })
+        };
+    }
+
+    // 加载帖子列表
+    async function loadPosts() {
+        try {
+            // 显示加载状态
+            document.getElementById('postList').innerHTML = `
                     <div class="text-center py-5">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">加载中...</span>
                         </div>
                     </div>
                 `;
-                
-                // 构建请求参数
-                const params = {
-                    page: currentPage,
-                    limit: 10,
-                    sort: currentSort
-                };
-                
-                if (currentSection) {
-                    params.sectionId = currentSection;
-                }
-                
-                if (currentKeyword) {
-                    params.keyword = currentKeyword;
-                }
-                
-                // 发送请求
-                const response = await get('/forum/posts', params);
-                
-                // 渲染帖子列表
-                renderPosts(response.posts);
-                
-                // 渲染分页
-                renderPagination(response.pagination);
-                
-            } catch (error) {
-                console.error('加载帖子列表失败:', error);
-                document.getElementById('postList').innerHTML = '<div class="text-center py-5 text-muted">加载失败，请稍后重试</div>';
-            }
+
+            // 优雅地构建参数
+            const params = buildPostParams();
+
+            // 发送请求
+            const response = await get('/forum/posts', params);
+            const posts = response.data || response;
+
+            // 渲染帖子列表
+            renderPosts(posts);
+
+            // 渲染简化分页（只有上一页和下一页）
+            renderSimplePagination(posts.length);
+
+        } catch (error) {
+            console.error('加载帖子列表失败:', error);
+            document.getElementById('postList').innerHTML = '<div class="text-center py-5 text-muted">加载失败，请稍后重试</div>';
         }
-        
-        // 渲染帖子列表
-        function renderPosts(posts) {
-            const container = document.getElementById('postList');
-            
-            if (!posts || posts.length === 0) {
-                container.innerHTML = '<div class="text-center py-5 text-muted">暂无帖子</div>';
-                return;
-            }
-            
-            container.innerHTML = posts.map(post => `
+    }
+
+    // 渲染帖子列表
+    function renderPosts(posts) {
+        const container = document.getElementById('postList');
+
+        if (!posts || posts.length === 0) {
+            container.innerHTML = '<div class="text-center py-5 text-muted">暂无帖子</div>';
+            return;
+        }
+
+        container.innerHTML = posts.map(post => `
                 <div class="post-item border-bottom p-3">
                     <div class="d-flex">
                         <div class="post-avatar me-3">
-                            <img src="${post.userAvatar || '/images/default-avatar.png'}" 
-                                 alt="${post.userNickname}" 
-                                 class="rounded-circle" 
+                            <img src="${post.userAvatar || '/images/default-avatar.png'}"
+                                 alt="${post.userNickname}"
+                                 class="rounded-circle"
                                  style="width: 40px; height: 40px; object-fit: cover;">
                         </div>
                         <div class="post-content flex-grow-1">
                             <div class="post-header d-flex justify-content-between align-items-start mb-2">
                                 <div>
                                     <h6 class="mb-0">
-                                        <a href="/forum/post/${post.id}" class="text-decoration-none">
+                                        <a href="#" class="text-decoration-none" onclick="showPostDetail(${post.id})">
                                             ${post.isTop ? '<i class="bi bi-pin-angle text-danger me-1"></i>' : ''}
                                             ${post.isEssence ? '<i class="bi bi-star-fill text-warning me-1"></i>' : ''}
                                             ${post.title}
@@ -504,142 +597,395 @@
                     </div>
                 </div>
             `).join('');
+    }
+
+    // 渲染简化分页（只有上一页和下一页）
+    function renderSimplePagination(postsCount) {
+        const container = document.getElementById('pagination');
+
+        // 如果帖子数量小于每页限制，或者当前是第一页且没有更多帖子，则不显示分页
+        if (postsCount < 10 && currentPage === 1) {
+            container.innerHTML = '';
+            return;
         }
-        
-        // 渲染分页
-        function renderPagination(pagination) {
-            const container = document.getElementById('pagination');
-            
-            if (!pagination || pagination.totalPages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-            
-            let html = '';
-            
-            // 上一页
-            if (pagination.hasPrev) {
-                html += `<li class="page-item">
-                    <a class="page-link" href="#" data-page="${pagination.prevPage}">上一页</a>
+
+        let html = '';
+
+        // 上一页按钮（当前页大于1时显示）
+        if (currentPage > 1) {
+            html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}">上一页</a>
                 </li>`;
-            }
-            
-            // 页码
-            for (let i = 1; i <= pagination.totalPages; i++) {
-                if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)) {
-                    html += `<li class="page-item ${i === pagination.currentPage ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>`;
-                } else if (i === pagination.currentPage - 3 || i === pagination.currentPage + 3) {
-                    html += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+        }
+
+        // 当前页信息
+        html += `<li class="page-item disabled"><span class="page-link">第 ${currentPage} 页</span></li>`;
+
+        // 下一页按钮（如果当前页有10个帖子，说明可能还有更多）
+        if (postsCount > 10) {
+            html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}">下一页</a>
+                </li>`;
+        }
+
+        container.innerHTML = html;
+
+        // 绑定点击事件
+        container.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = parseInt(this.dataset.page);
+                if (page && page !== currentPage) {
+                    currentPage = page;
+                    loadPosts();
                 }
-            }
-            
-            // 下一页
-            if (pagination.hasNext) {
-                html += `<li class="page-item">
-                    <a class="page-link" href="#" data-page="${pagination.nextPage}">下一页</a>
-                </li>`;
-            }
-            
-            container.innerHTML = html;
-            
-            // 绑定点击事件
-            container.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const page = parseInt(this.dataset.page);
-                    if (page && page !== currentPage) {
-                        currentPage = page;
-                        loadPosts();
-                    }
-                });
             });
+        });
+    }
+
+    // 加载版块选项
+    async function loadSectionOptions() {
+        try {
+            console.log('Loading section options...');
+            const response = await get('/forum/sections');
+            const sections = response.data || response;
+            const select = document.getElementById('postSection');
+
+            console.log('Sections data for dropdown:', sections);
+            
+            // 检查数据是否为空或格式不正确
+            if (!sections || !Array.isArray(sections) || sections.length === 0) {
+                console.error('版块数据为空或格式错误:', sections);
+                showMessage('版块数据加载失败，请刷新页面重试', 'danger');
+                return;
+            }
+
+            let html = '<option value="">请选择版块</option>';
+            sections.forEach(section => {
+                // 尝试多种可能的字段名
+                const categoryId = section.categoryId;
+                console.log('Section item:', section, 'categoryId:', categoryId);
+                
+                if (categoryId) {
+                    html += `<option value="${categoryId}">${section.name}</option>`;
+                } else {
+                    console.error('版块数据缺少ID字段:', section);
+                }
+            });
+
+            select.innerHTML = html;
+            
+            // 移除required属性，避免干扰JavaScript获取值
+            select.removeAttribute('required');
+
+            console.log('Section options loaded, options count:', sections.length);
+        } catch (error) {
+            console.error('加载版块选项失败:', error);
+            showMessage('版块数据加载失败，请刷新页面重试', 'danger');
         }
-        
-        // 加载版块选项
-        async function loadSectionOptions() {
-            try {
-                const sections = await get('/forum/sections');
-                const select = document.getElementById('postSection');
-                
-                let html = '<option value="">请选择版块</option>';
-                sections.forEach(section => {
-                    html += `<option value="${section.id}">${section.name}</option>`;
-                });
-                
-                select.innerHTML = html;
-            } catch (error) {
-                console.error('加载版块选项失败:', error);
-            }
+    }
+
+    // 提交帖子
+    async function submitPost() {
+        const sectionSelect = document.getElementById("postSection");
+        const titleInput = document.getElementById("postTitle");
+        const contentTextarea = document.getElementById("postContent");
+
+        console.log('Submit button clicked, checking select element:', sectionSelect);
+        console.log('Select options:', sectionSelect.options);
+        console.log('Selected index:', sectionSelect.selectedIndex);
+
+        // 获取并验证数据
+        const sectionIdValue = sectionSelect.value;
+        const title = titleInput.value.trim();
+        const content = contentTextarea.value.trim();
+
+        console.log('Raw sectionId value:', sectionIdValue, 'Type:', typeof sectionIdValue);
+        console.log('Selected option text:', sectionSelect.options[sectionSelect.selectedIndex]?.text);
+
+        // 验证表单
+        if (!sectionIdValue || sectionIdValue === "" || sectionIdValue === "null" || sectionIdValue === "undefined") {
+            console.error('SectionId validation failed, value:', sectionIdValue);
+            showMessage('请选择版块', 'warning');
+            return;
         }
-        
-        // 提交帖子
-        async function submitPost() {
-            const form = document.getElementById('newPostForm');
-            const formData = serializeForm(form);
-            
-            // 验证表单
-            if (!formData.sectionId) {
-                showMessage('请选择版块', 'warning');
-                return;
-            }
-            
-            if (!formData.title.trim()) {
-                showMessage('请输入标题', 'warning');
-                return;
-            }
-            
-            if (!formData.content.trim()) {
-                showMessage('请输入内容', 'warning');
-                return;
-            }
-            
-            try {
-                // 显示加载状态
-                const submitBtn = document.getElementById('submitPostBtn');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = '发布中...';
-                submitBtn.disabled = true;
-                
-                // 发送请求
-                await post('/forum/posts', formData);
-                
-                // 关闭模态框
-                const modal = bootstrap.Modal.getInstance(document.getElementById('newPostModal'));
+
+        // 尝试转换为数字
+        const sectionId = parseInt(sectionIdValue, 10);
+        console.log('Parsed sectionId:', sectionId, 'IsNaN:', isNaN(sectionId));
+
+        if (isNaN(sectionId) || sectionId <= 0) {
+            console.error('SectionId conversion failed, parsed value:', sectionId);
+            showMessage('选择的版块无效', 'warning');
+            return;
+        }
+
+        if (!title) {
+            showMessage('请输入标题', 'warning');
+            return;
+        }
+
+        if (!content) {
+            showMessage('请输入内容', 'warning');
+            return;
+        }
+
+        const formData = {
+            sectionId: sectionId,
+            title: title,
+            content: content
+        };
+
+        console.log('Submitting data:', formData);
+
+        try {
+            // 显示加载状态
+            const submitBtn = document.getElementById('submitPostBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '发布中...';
+            submitBtn.disabled = true;
+
+            // 发送请求
+            const response = await post('/forum/posts', formData);
+            console.log('Server response:', response);
+
+            // 关闭模态框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('newPostModal'));
+            if (modal) {
                 modal.hide();
-                
-                // 重置表单
-                form.reset();
-                
-                // 显示成功消息
-                showMessage('发帖成功', 'success');
-                
-                // 重新加载帖子列表
-                loadPosts();
-                
-            } catch (error) {
-                console.error('发帖失败:', error);
-                showMessage(error.message || '发帖失败，请稍后重试', 'danger');
-            } finally {
-                // 恢复按钮状态
-                const submitBtn = document.getElementById('submitPostBtn');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
+            }
+
+            // 重置表单
+            document.getElementById('newPostForm').reset();
+
+            // 显示成功消息
+            showMessage('发帖成功', 'success');
+
+            // 重新加载帖子列表
+            currentPage = 1; // 重置到第一页
+            loadPosts();
+
+        } catch (error) {
+            console.error('发帖失败:', error);
+            showMessage(error.message || '发帖失败，请稍后重试', 'danger');
+        } finally {
+            // 恢复按钮状态
+            const submitBtn = document.getElementById('submitPostBtn');
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    // 显示帖子详情
+    async function showPostDetail(postId) {
+        try {
+            // 显示加载状态
+            document.getElementById('postDetailContent').innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                        <p class="mt-2 text-muted">正在加载帖子详情...</p>
+                    </div>
+                `;
+
+            // 获取模态框元素和现有实例
+            const modalElement = document.getElementById('postDetailModal');
+            let modal = bootstrap.Modal.getInstance(modalElement);
+
+            // 如果模态框实例不存在，创建新的实例
+            if (!modal) {
+                modal = new bootstrap.Modal(modalElement);
+            }
+
+            // 使用一次性事件监听器，避免内存泄漏
+            const handleModalHidden = () => {
+                // 清理模态框内容
+                document.getElementById('postDetailContent').innerHTML = '';
+                // 移除事件监听器
+                modalElement.removeEventListener('hidden.bs.modal', handleModalHidden);
+            };
+
+            // 移除之前的事件监听器，然后添加新的
+            modalElement.removeEventListener('hidden.bs.modal', handleModalHidden);
+            modalElement.addEventListener('hidden.bs.modal', handleModalHidden, { once: true });
+
+            // 打开模态框
+            modal.show();
+
+            // 获取帖子详情
+            const response = await get(`/forum/post/${postId}`);
+            const post = response.data;
+
+            // 渲染帖子详情
+            renderPostDetail(post);
+
+        } catch (error) {
+            console.error('加载帖子详情失败:', error);
+            document.getElementById('postDetailContent').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        加载帖子详情失败，请稍后重试
+                    </div>
+                `;
+        }
+    }
+
+    // 渲染帖子详情
+    function renderPostDetail(post) {
+        const container = document.getElementById('postDetailContent');
+
+        container.innerHTML = `
+                <div class="post-detail">
+                    <!-- 帖子头部 -->
+                    <div class="post-header border-bottom pb-3 mb-3">
+                        <h2 class="post-title mb-2">${post.title}</h2>
+                        <div class="post-meta d-flex align-items-center text-muted">
+                            <div class="d-flex align-items-center me-4">
+                                <img src="${post.userAvatar || '/images/default-avatar.png'}"
+                                     alt="${post.userNickname}"
+                                     class="rounded-circle me-2"
+                                     style="width: 32px; height: 32px; object-fit: cover;">
+                                <span>${post.userNickname || '匿名用户'}</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="bi bi-clock me-1"></i>
+                                <span>${formatDate(post.createTime) || '未知时间'}</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="bi bi-eye me-1"></i>
+                                <span>${formatNumber(post.viewCount)} 浏览</span>
+                            </div>
+                            <div class="me-4">
+                                <i class="bi bi-chat me-1"></i>
+                                <span>${formatNumber(post.replyCount)} 回复</span>
+                            </div>
+                            <div>
+                                <i class="bi bi-hand-thumbs-up me-1"></i>
+                                <span>${formatNumber(post.likeCount)} 点赞</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 帖子内容 -->
+                    <div class="post-content mb-4">
+                        <div class="content-body" style="line-height: 1.8; font-size: 16px;">
+                            ${post.content}
+                        </div>
+                    </div>
+
+                    <!-- 帖子操作 -->
+                    <div class="post-actions d-flex justify-content-between align-items-center border-top pt-3">
+                        <div class="action-buttons">
+                            <button class="btn btn-outline-primary btn-sm me-2" onclick="likePost(${post.id})">
+                                <i class="bi bi-hand-thumbs-up me-1"></i>
+                                点赞 (${formatNumber(post.likeCount)})
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm me-2" onclick="collectPost(${post.id})">
+                                <i class="bi bi-star me-1"></i>
+                                收藏 (${formatNumber(post.collectCount)})
+                            </button>
+                        </div>
+                        <div class="share-buttons">
+                            <button class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-share me-1"></i>
+                                分享
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+    }
+
+    // 点赞帖子
+    async function likePost(postId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showMessage('请先登录后再点赞', 'warning');
+                return;
+            }
+
+            const response = await post(`/forum/posts/${postId}/like`);
+
+            // 根据后端返回的状态码判断是否成功
+            if (response.code === 200) {
+                showMessage('点赞成功', 'success');
+                // 刷新帖子详情
+                showPostDetail(postId);
+            } else {
+                showMessage(response.msg || '点赞失败', 'danger');
+            }
+
+        } catch (error) {
+            console.error('点赞失败:', error);
+            // 检查是否为401未授权错误
+            if (error.status === 401) {
+                showMessage('请先登录后再点赞', 'warning');
+                // 清除无效的token
+                localStorage.removeItem('token');
+            } else {
+                showMessage(error.message || '点赞失败，请稍后重试', 'danger');
             }
         }
-        
-        // 页面初始化函数
-        function pageInit() {
-            // 检查登录状态并更新用户菜单
-            checkLoginStatus();
-            
-            // 初始化论坛页面
-            initForumPage();
+    }
+
+    // 收藏帖子（示例函数，需要后端支持）
+    async function collectPost(postId) {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showMessage('请先登录后再点赞', 'warning');
+                return;
+            }
+
+            const response = await post(`/forum/posts/${postId}/collect`);
+
+            // 根据后端返回的状态码判断是否成功
+            if (response.code === 200) {
+                showMessage('收藏成功', 'success');
+                // 刷新帖子详情
+                showPostDetail(postId);
+            } else {
+                showMessage(response.msg || '收藏失败', 'danger');
+            }
+
+        } catch (error) {
+            console.error('收藏失败:', error);
+            // 检查是否为401未授权错误
+            if (error.status === 401) {
+                showMessage('请先登录后再收藏', 'warning');
+                // 清除无效的token
+                localStorage.removeItem('token');
+            } else {
+                showMessage(error.message || '收藏失败，请稍后重试', 'danger');
+            }
         }
-        
-        // 页面加载完成后执行初始化
-        document.addEventListener('DOMContentLoaded', pageInit);
-    </script>
+    }
+
+    // 初始化论坛页面
+    function initForumPage() {
+        // 加载版块列表
+        loadSections();
+
+        // 加载热门帖子
+        loadHotPosts();
+
+        // 加载最新回复
+        loadRecentReplies();
+
+        // 加载论坛统计
+        loadForumStats();
+
+        // 加载帖子列表
+        loadPosts();
+
+        // 绑定事件
+        bindEvents();
+    }
+
+    // 页面加载完成后执行初始化
+    document.addEventListener('DOMContentLoaded', pageInit);
+</script>
 </body>
 </html>

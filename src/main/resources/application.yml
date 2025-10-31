@@ -26,8 +26,8 @@ spring:
       max-request-size: 10MB
 # MyBatis-Plus配置
 mybatis-plus:
-  mapper-locations: classpath*:com/shxy/w202350766/suiestation/mapper/*.xml
-  type-aliases-package: com.shxy.w202350766.suiestation.domain
+  mapper-locations: classpath*:com/shxy/w202350766/campusserviceplatform/mapper/*.xml
+  type-aliases-package: com.shxy.w202350766.campusserviceplatform.domain
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false

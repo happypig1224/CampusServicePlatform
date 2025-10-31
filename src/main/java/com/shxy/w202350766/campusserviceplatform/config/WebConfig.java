@@ -25,7 +25,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/auth/login", "/api/auth/register", "/api/auth/logout")
                 .excludePathPatterns("/static/**", "/css/**", "/js/**", "/images/**")
                 .excludePathPatterns("/error", "/favicon.ico")
-                .excludePathPatterns("/", "/index", "/login", "/register");
+                .excludePathPatterns("/forum","/market","/lost-found","/errand","/resource")
+                .excludePathPatterns("/", "/index", "/login", "/register")
+                .excludePathPatterns("/api/forum/sections","/api/forum/posts","/api/forum/posts/{postId}","/api/forum/posts/hot" ,
+                        "/api/forum/replies/latest","/api/forum/stats",
+                        "/api/forum/post/{postId}");
     }
 
     @Override

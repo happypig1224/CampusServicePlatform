@@ -41,10 +41,12 @@ public class JwtUtils {
      */
     public static Long parseToken(String token) {
         try {
+            // 移除Bearer前缀（如果存在）
+            String cleanToken = token.replace("Bearer ", "");
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(SECRET_KEY)
                     .build()
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(cleanToken)
                     .getBody();
             return Long.parseLong(claims.getSubject());
         } catch (Exception e) {

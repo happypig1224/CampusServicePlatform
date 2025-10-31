@@ -1,6 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
@@ -38,6 +39,7 @@ public class User {
      * 手机号
      */
     private String phone;
+
     /**
      * 性别
      */
