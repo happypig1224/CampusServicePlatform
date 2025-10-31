@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: suiestation
+  #数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/suistation?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  # Thymeleaf配置
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+  # JSON配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+# MyBatis-Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:com/shxy/w202350766/suiestation/mapper/*.xml
+  type-aliases-package: com.shxy.w202350766.suiestation.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+# 腾讯云COS配置
+tencent:
+  cos:
+    # 请设置环境变量 TENCENT_COS_SECRET_ID 和 TENCENT_COS_SECRET_KEY
+    secret-id: ${TENCENT_COS_SECRET_ID:}
+    secret-key: ${TENCENT_COS_SECRET_KEY:}
+    region: ap-guangzhou
+    bucket-name: cloudclassroom-1383957992
+    avatar-dir: cloudclassroom/
+# 日志配置
+logging:
+  level:
+    com.shxy.w202350766.suiestation: debug
+    org.springframework: info
+    org.mybatis: debug
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+  file:
+    name: logs/suiestation.log
+    max-size: 10MB
+    max-history: 30
