@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源共享 - 绥E站</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">绥E站</a>
+                
+                <ul class="nav-links">
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/forum">校园论坛</a></li>
+                    <li><a href="/market">二手市场</a></li>
+                    <li><a href="/lost-found">失物招领</a></li>
+                    <li><a href="/errand">校园跑腿</a></li>
+                    <li><a href="/resource" class="active">资源共享</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="/login" class="btn btn-primary">登录</a>
+                    <a href="/register" class="btn btn-outline">注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- 搜索和筛选 -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="searchInput" placeholder="搜索资源...">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="categorySelect">
+                                <option value="">全部分类</option>
+                                <!-- 分类选项将通过JavaScript动态加载 -->
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="sortSelect">
+                                <option value="latest">最新发布</option>
+                                <option value="popular">最受欢迎</option>
+                                <option value="downloads">下载最多</option>
+                                <option value="rating">评分最高</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary w-100" id="searchBtn">搜索</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-primary w-100" id="shareBtn">分享资源</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 资源切换标签 -->
+            <div class="card mb-4">
+                <div class="card-body p-0">
+                    <ul class="nav nav-tabs nav-fill" id="resourceTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">全部资源</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="my-resources-tab" data-bs-toggle="tab" data-bs-target="#my-resources" type="button" role="tab" aria-controls="my-resources" aria-selected="false">我的资源</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="favorites-tab" data-bs-toggle="tab" data-bs-target="#favorites" type="button" role="tab" aria-controls="favorites" aria-selected="false">我的收藏</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- 左侧分类导航 -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">资源分类</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush" id="categoryList">
+                                <!-- 分类列表将通过JavaScript动态加载 -->
+                                <div class="text-center py-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 热门标签 -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">热门标签</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="tagCloud" class="d-flex flex-wrap gap-2">
+                                <!-- 标签云将通过JavaScript动态加载 -->
+                                <div class="text-center py-3 w-100">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 中间资源列表 -->
+                <div class="col-md-9">
+                    <div class="tab-content" id="resourceTabContent">
+                        <!-- 全部资源 -->
+                        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0" id="allTitle">全部资源</h5>
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="viewMode" id="gridView" autocomplete="off" checked>
+                                        <label class="btn btn-outline-secondary" for="gridView"><i class="bi bi-grid-3x3-gap"></i></label>
+                                        
+                                        <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
+                                        <label class="btn btn-outline-secondary" for="listView"><i class="bi bi-list-ul"></i></label>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <!-- 资源列表 -->
+                                    <div id="allResourceList" class="row g-4">
+                                        <!-- 资源列表将通过JavaScript动态加载 -->
+                                        <div class="col-12 text-center py-5">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">加载中...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 分页 -->
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <nav aria-label="资源分页">
+                                            <ul class="pagination" id="allPagination">
+                                                <!-- 分页将通过JavaScript动态生成 -->
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 我的资源 -->
+                        <div class="tab-pane fade" id="my-resources" role="tabpanel" aria-labelledby="my-resources-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">我分享的资源</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- 资源列表 -->
+                                    <div id="myResourceList" class="row g-4">
+                                        <!-- 资源列表将通过JavaScript动态加载 -->
+                                        <div class="col-12 text-center py-5">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">加载中...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 分页 -->
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <nav aria-label="我的资源分页">
+                                            <ul class="pagination" id="myResourcePagination">
+                                                <!-- 分页将通过JavaScript动态生成 -->
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 我的收藏 -->
+                        <div class="tab-pane fade" id="favorites" role="tabpanel" aria-labelledby="favorites-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">我收藏的资源</h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- 资源列表 -->
+                                    <div id="favoriteResourceList" class="row g-4">
+                                        <!-- 资源列表将通过JavaScript动态加载 -->
+                                        <div class="col-12 text-center py-5">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">加载中...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 分页 -->
+                                    <div class="d-flex justify-content-center mt-4">
+                                        <nav aria-label="收藏资源分页">
+                                            <ul class="pagination" id="favoriteResourcePagination">
+                                                <!-- 分页将通过JavaScript动态生成 -->
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 分享资源模态框 -->
+    <div class="modal fade" id="shareResourceModal" tabindex="-1" aria-labelledby="shareResourceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="shareResourceModalLabel">分享资源</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="shareResourceForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="resourceCategory" class="form-label">资源分类 <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="resourceCategory" name="categoryId" required>
+                                        <option value="">请选择分类</option>
+                                        <!-- 分类选项将通过JavaScript动态加载 -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="resourceType" class="form-label">资源类型 <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="resourceType" name="type" required>
+                                        <option value="">请选择类型</option>
+                                        <option value="document">文档</option>
+                                        <option value="video">视频</option>
+                                        <option value="audio">音频</option>
+                                        <option value="image">图片</option>
+                                        <option value="software">软件</option>
+                                        <option value="other">其他</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resourceTitle" class="form-label">资源标题 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="resourceTitle" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resourceDescription" class="form-label">资源描述 <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="resourceDescription" name="description" rows="5" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resourceFile" class="form-label">上传文件 <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="resourceFile" required>
+                            <div class="form-text">支持的文件类型：文档、视频、音频、图片等</div>
+                            <div id="resourceFileInfo" class="mt-2">
+                                <!-- 文件信息显示区域 -->
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="resourceTags" class="form-label">标签</label>
+                            <input type="text" class="form-control" id="resourceTags" name="tags" placeholder="输入标签，用逗号分隔">
+                            <div class="form-text">例如：学习资料, 课程笔记, 教程</div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="resourceIsPublic" name="isPublic" checked>
+                                <label class="form-check-label" for="resourceIsPublic">
+                                    公开资源 (所有人可见)
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitResourceBtn">分享</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 资源详情模态框 -->
+    <div class="modal fade" id="resourceDetailModal" tabindex="-1" aria-labelledby="resourceDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="resourceDetailModalLabel">资源详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="resourcePreview" class="text-center mb-3">
+                                <!-- 资源预览将通过JavaScript动态加载 -->
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" id="downloadBtn">
+                                    <i class="bi bi-download me-2"></i>下载资源
+                                </button>
+                                <button class="btn btn-outline-primary" id="favoriteBtn">
+                                    <i class="bi bi-heart me-2"></i>收藏
+                                </button>
+                                <button class="btn btn-outline-secondary" id="shareBtn">
+                                    <i class="bi bi-share me-2"></i>分享
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h4 id="detailTitle"></h4>
+                                <div>
+                                    <span class="badge bg-${getCategoryColor(resourceCategory)} me-2" id="detailCategory"></span>
+                                    <span class="badge bg-${getTypeColor(resourceType)}" id="detailType"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p id="detailDescription"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p><strong>文件大小：</strong><span id="detailFileSize"></span></p>
+                                <p><strong>上传时间：</strong><span id="detailCreateTime"></span></p>
+                                <p><strong>下载次数：</strong><span id="detailDownloadCount"></span></p>
+                                <p><strong>收藏次数：</strong><span id="detailFavoriteCount"></span></p>
+                                <p><strong>分享者：</strong><span id="detailUploader"></span></p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>标签：</h6>
+                                <div id="detailTags" class="d-flex flex-wrap gap-2">
+                                    <!-- 标签将通过JavaScript动态加载 -->
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h6>评分：</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="me-2" id="detailRating">
+                                        <!-- 评分星星将通过JavaScript动态加载 -->
+                                    </div>
+                                    <span id="detailRatingText"></span>
+                                    <button class="btn btn-sm btn-outline-secondary ms-2" id="rateBtn">评分</button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <h6>评论：</h6>
+                                <div id="commentsSection">
+                                    <!-- 评论将通过JavaScript动态加载 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评分模态框 -->
+    <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ratingModalLabel">资源评分</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="ratingForm">
+                        <div class="mb-3">
+                            <label class="form-label">请为该资源评分：</label>
+                            <div class="d-flex justify-content-center fs-2" id="ratingStars">
+                                <i class="bi bi-star text-muted" data-rating="1"></i>
+                                <i class="bi bi-star text-muted" data-rating="2"></i>
+                                <i class="bi bi-star text-muted" data-rating="3"></i>
+                                <i class="bi bi-star text-muted" data-rating="4"></i>
+                                <i class="bi bi-star text-muted" data-rating="5"></i>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ratingComment" class="form-label">评价内容（可选）：</label>
+                            <textarea class="form-control" id="ratingComment" rows="3" placeholder="分享您对该资源的看法..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitRatingBtn">提交评分</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        // 全局变量
+        let currentCategory = null;
+        let currentTab = 'all';
+        let allPage = 1;
+        let myResourcePage = 1;
+        let favoriteResourcePage = 1;
+        let currentSort = 'latest';
+        let currentKeyword = '';
+        let viewMode = 'grid';
+        let resourceCategory = null;
+        let resourceType = null;
+        let currentResourceId = null;
+        let selectedRating = 0;
+        let uploadedResourceFile = null;
+        
+        // 页面初始化函数
+        function pageInit() {
+            // 加载分类列表
+            loadCategories();
+            
+            // 加载热门标签
+            loadTags();
+            
+            // 加载资源列表
+            loadAllResources();
+            
+            // 绑定事件
+            bindEvents();
+        }
+        
+        // 绑定事件
+        function bindEvents() {
+            // 搜索
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                currentKeyword = document.getElementById('searchInput').value.trim();
+                resetPagination();
+                loadCurrentTabResources();
+            });
+            
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    currentKeyword = this.value.trim();
+                    resetPagination();
+                    loadCurrentTabResources();
+                }
+            });
+            
+            // 分类筛选
+            document.getElementById('categorySelect').addEventListener('change', function() {
+                currentCategory = this.value ? parseInt(this.value) : null;
+                resetPagination();
+                loadCurrentTabResources();
+            });
+            
+            // 排序
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                resetPagination();
+                loadCurrentTabResources();
+            });
+            
+            // 视图模式切换
+            document.querySelectorAll('input[name="viewMode"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    viewMode = this.id === 'gridView' ? 'grid' : 'list';
+                    loadCurrentTabResources();
+                });
+            });
+            
+            // 标签页切换
+            document.querySelectorAll('#resourceTabs button').forEach(tab => {
+                tab.addEventListener('shown.bs.tab', function(e) {
+                    currentTab = e.target.id.replace('-tab', '');
+                    loadCurrentTabResources();
+                });
+            });
+            
+            // 分享资源按钮
+            document.getElementById('shareBtn').addEventListener('click', function() {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再分享资源', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 打开分享资源模态框
+                const modal = new bootstrap.Modal(document.getElementById('shareResourceModal'));
+                modal.show();
+                
+                // 加载分类选项
+                loadResourceCategoryOptions();
+            });
+            
+            // 资源文件上传
+            document.getElementById('resourceFile').addEventListener('change', handleResourceFileUpload);
+            
+            // 提交资源
+            document.getElementById('submitResourceBtn').addEventListener('click', submitResource);
+            
+            // 评分星星点击事件
+            document.querySelectorAll('#ratingStars i').forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateRatingStars(selectedRating);
+                });
+            });
+            
+            // 提交评分
+            document.getElementById('submitRatingBtn').addEventListener('click', submitRating);
+        }
+        
+        // 重置分页
+        function resetPagination() {
+            allPage = 1;
+            myResourcePage = 1;
+            favoriteResourcePage = 1;
+        }
+        
+        // 加载当前标签页的资源
+        function loadCurrentTabResources() {
+            switch (currentTab) {
+                case 'all':
+                    loadAllResources();
+                    break;
+                case 'my-resources':
+                    loadMyResources();
+                    break;
+                case 'favorites':
+                    loadFavoriteResources();
+                    break;
+            }
+        }
+        
+        // 加载分类列表
+        async function loadCategories() {
+            try {
+                const categories = await get('/resource/categories');
+                renderCategories(categories);
+                renderCategoryOptions(categories);
+            } catch (error) {
+                console.error('加载分类列表失败:', error);
+                document.getElementById('categoryList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
+            }
+        }
+        
+        // 渲染分类列表
+        function renderCategories(categories) {
+            const container = document.getElementById('categoryList');
+            
+            // 添加"全部分类"选项
+            let html = `
+                <a href="#" class="list-group-item list-group-item-action ${!currentCategory ? 'active' : ''}" data-category-id="">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>全部分类
+                </a>
+            `;
+            
+            // 添加分类
+            categories.forEach(category => {
+                html += `
+                    <a href="#" class="list-group-item list-group-item-action ${currentCategory === category.id ? 'active' : ''}" 
+                       data-category-id="${category.id}">
+                        <i class="bi ${category.icon || 'bi-folder'} me-2"></i>${category.name}
+                        <span class="badge bg-secondary rounded-pill float-end">${category.resourceCount || 0}</span>
+                    </a>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // 绑定点击事件
+            container.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 更新活动状态
+                    container.querySelectorAll('a').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新当前分类
+                    currentCategory = this.dataset.categoryId ? parseInt(this.dataset.categoryId) : null;
+                    resetPagination();
+                    
+                    // 更新分类选择框
+                    document.getElementById('categorySelect').value = currentCategory || '';
+                    
+                    // 重新加载资源
+                    loadCurrentTabResources();
+                });
+            });
+        }
+        
+        // 渲染分类选项
+        function renderCategoryOptions(categories) {
+            const select = document.getElementById('categorySelect');
+            
+            let html = '<option value="">全部分类</option>';
+            categories.forEach(category => {
+                html += `<option value="${category.id}">${category.name}</option>`;
+            });
+            
+            select.innerHTML = html;
+        }
+        
+        // 加载资源分类选项（用于分享资源）
+        async function loadResourceCategoryOptions() {
+            try {
+                const categories = await get('/resource/categories');
+                const select = document.getElementById('resourceCategory');
+                
+                let html = '<option value="">请选择分类</option>';
+                categories.forEach(category => {
+                    html += `<option value="${category.id}">${category.name}</option>`;
+                });
+                
+                select.innerHTML = html;
+            } catch (error) {
+                console.error('加载分类选项失败:', error);
+            }
+        }
+        
+        // 加载热门标签
+        async function loadTags() {
+            try {
+                const tags = await get('/resource/tags', { limit: 20 });
+                renderTags(tags);
+            } catch (error) {
+                console.error('加载热门标签失败:', error);
+                document.getElementById('tagCloud').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
+            }
+        }
+        
+        // 渲染热门标签
+        function renderTags(tags) {
+            const container = document.getElementById('tagCloud');
+            
+            if (!tags || tags.length === 0) {
+                container.innerHTML = '<div class="p-3 text-muted">暂无标签</div>';
+                return;
+            }
+            
+            container.innerHTML = tags.map(tag => {
+                // 根据使用频率设置标签大小
+                let sizeClass = 'badge bg-secondary';
+                if (tag.count > 10) {
+                    sizeClass = 'badge bg-primary';
+                } else if (tag.count > 5) {
+                    sizeClass = 'badge bg-info text-dark';
+                }
+                
+                return `<a href="#" class="tag-item ${sizeClass}" data-tag="${tag.name}">${tag.name}</a>`;
+            }).join('');
+            
+            // 绑定点击事件
+            container.querySelectorAll('.tag-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tag = this.dataset.tag;
+                    currentKeyword = tag;
+                    document.getElementById('searchInput').value = tag;
+                    resetPagination();
+                    loadCurrentTabResources();
+                });
+            });
+        }
+        
+        // 加载全部资源
+        async function loadAllResources() {
+            try {
+                // 显示加载状态
+                document.getElementById('allResourceList').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                `;
+                
+                // 构建请求参数
+                const params = {
+                    page: allPage,
+                    limit: viewMode === 'grid' ? 12 : 10,
+                    sort: currentSort
+                };
+                
+                if (currentCategory) {
+                    params.categoryId = currentCategory;
+                }
+                
+                if (currentKeyword) {
+                    params.keyword = currentKeyword;
+                }
+                
+                // 发送请求
+                const response = await get('/resource/resources', params);
+                
+                // 渲染资源列表
+                renderResources(response.resources, 'allResourceList');
+                
+                // 渲染分页
+                renderPagination(response.pagination, 'allPagination');
+                
+            } catch (error) {
+                console.error('加载全部资源失败:', error);
+                document.getElementById('allResourceList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+            }
+        }
+        
+        // 加载我的资源
+        async function loadMyResources() {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    document.getElementById('myResourceList').innerHTML = '<div class="col-12 text-center py-5 text-muted">请先登录</div>';
+                    return;
+                }
+                
+                // 显示加载状态
+                document.getElementById('myResourceList').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                `;
+                
+                // 构建请求参数
+                const params = {
+                    page: myResourcePage,
+                    limit: viewMode === 'grid' ? 12 : 10
+                };
+                
+                if (currentKeyword) {
+                    params.keyword = currentKeyword;
+                }
+                
+                // 发送请求
+                const response = await get('/resource/resources/my', params);
+                
+                // 渲染资源列表
+                renderResources(response.resources, 'myResourceList');
+                
+                // 渲染分页
+                renderPagination(response.pagination, 'myResourcePagination');
+                
+            } catch (error) {
+                console.error('加载我的资源失败:', error);
+                document.getElementById('myResourceList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+            }
+        }
+        
+        // 加载收藏的资源
+        async function loadFavoriteResources() {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    document.getElementById('favoriteResourceList').innerHTML = '<div class="col-12 text-center py-5 text-muted">请先登录</div>';
+                    return;
+                }
+                
+                // 显示加载状态
+                document.getElementById('favoriteResourceList').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                `;
+                
+                // 构建请求参数
+                const params = {
+                    page: favoriteResourcePage,
+                    limit: viewMode === 'grid' ? 12 : 10
+                };
+                
+                if (currentKeyword) {
+                    params.keyword = currentKeyword;
+                }
+                
+                // 发送请求
+                const response = await get('/resource/resources/favorites', params);
+                
+                // 渲染资源列表
+                renderResources(response.resources, 'favoriteResourceList');
+                
+                // 渲染分页
+                renderPagination(response.pagination, 'favoriteResourcePagination');
+                
+            } catch (error) {
+                console.error('加载收藏资源失败:', error);
+                document.getElementById('favoriteResourceList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+            }
+        }
+        
+        // 渲染资源列表
+        function renderResources(resources, containerId) {
+            const container = document.getElementById(containerId);
+            
+            if (!resources || resources.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center py-5 text-muted">暂无资源</div>';
+                return;
+            }
+            
+            if (viewMode === 'grid') {
+                // 网格视图
+                container.className = 'row g-4';
+                container.innerHTML = resources.map(resource => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 resource-item" data-resource-id="${resource.id}">
+                            <div class="resource-image-container position-relative">
+                                ${getResourcePreview(resource)}
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge bg-${getCategoryColor(resource.categoryId)}">${resource.categoryName}</span>
+                                </div>
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-${getTypeColor(resource.type)}">${getTypeText(resource.type)}</span>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${resource.title}</h5>
+                                <p class="card-text text-truncate">${resource.description}</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div class="text-warning">
+                                            ${renderStars(resource.rating)}
+                                        </div>
+                                        <small class="text-muted">${formatDate(resource.createTime)}</small>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-muted small">
+                                        <span><i class="bi bi-download me-1"></i>${formatNumber(resource.downloadCount)}</span>
+                                        <span><i class="bi bi-heart me-1"></i>${formatNumber(resource.favoriteCount)}</span>
+                                        <span><i class="bi bi-file-earmark me-1"></i>${formatFileSize(resource.fileSize)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                // 列表视图
+                container.className = 'row';
+                container.innerHTML = resources.map(resource => `
+                    <div class="col-12">
+                        <div class="card resource-item" data-resource-id="${resource.id}">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        ${getResourcePreview(resource)}
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                            <h5 class="card-title">${resource.title}</h5>
+                                            <div>
+                                                <span class="badge bg-${getCategoryColor(resource.categoryId)} me-2">${resource.categoryName}</span>
+                                                <span class="badge bg-${getTypeColor(resource.type)}">${getTypeText(resource.type)}</span>
+                                            </div>
+                                        </div>
+                                        <p class="card-text">${resource.description}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <div class="text-warning me-3">
+                                                    ${renderStars(resource.rating)}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    <span class="me-3"><i class="bi bi-download me-1"></i>${formatNumber(resource.downloadCount)}</span>
+                                                    <span class="me-3"><i class="bi bi-heart me-1"></i>${formatNumber(resource.favoriteCount)}</span>
+                                                    <span><i class="bi bi-file-earmark me-1"></i>${formatFileSize(resource.fileSize)}</span>
+                                                </div>
+                                            </div>
+                                            <small class="text-muted">${formatDate(resource.createTime)}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // 绑定资源点击事件
+            container.querySelectorAll('.resource-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const resourceId = this.dataset.resourceId;
+                    showResourceDetail(resourceId);
+                });
+            });
+        }
+        
+        // 获取资源预览
+        function getResourcePreview(resource) {
+            switch (resource.type) {
+                case 'image':
+                    return `<img src="${resource.previewUrl || '/images/default-image.jpg'}" class="card-img-top resource-preview" alt="${resource.title}">`;
+                case 'video':
+                    return `<div class="video-preview position-relative">
+                        <img src="${resource.previewUrl || '/images/default-video.jpg'}" class="card-img-top resource-preview" alt="${resource.title}">
+                        <div class="position-absolute top-50 start-50 translate-middle">
+                            <i class="bi bi-play-circle-fill text-white fs-1"></i>
+                        </div>
+                    </div>`;
+                case 'audio':
+                    return `<div class="audio-preview d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="bi bi-music-note-beamed fs-1 text-muted"></i>
+                    </div>`;
+                case 'document':
+                    return `<div class="document-preview d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="bi bi-file-earmark-text fs-1 text-muted"></i>
+                    </div>`;
+                case 'software':
+                    return `<div class="software-preview d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="bi bi-box-seam fs-1 text-muted"></i>
+                    </div>`;
+                default:
+                    return `<div class="default-preview d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                        <i class="bi bi-file-earmark fs-1 text-muted"></i>
+                    </div>`;
+            }
+        }
+        
+        // 渲染分页
+        function renderPagination(pagination, containerId) {
+            const container = document.getElementById(containerId);
+            
+            if (!pagination || pagination.totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // 上一页
+            if (pagination.hasPrev) {
+                html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${pagination.prevPage}">上一页</a>
+                </li>`;
+            }
+            
+            // 页码
+            for (let i = 1; i <= pagination.totalPages; i++) {
+                if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)) {
+                    html += `<li class="page-item ${i === pagination.currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>`;
+                } else if (i === pagination.currentPage - 3 || i === pagination.currentPage + 3) {
+                    html += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+            }
+            
+            // 下一页
+            if (pagination.hasNext) {
+                html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${pagination.nextPage}">下一页</a>
+                </li>`;
+            }
+            
+            container.innerHTML = html;
+            
+            // 绑定点击事件
+            container.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = parseInt(this.dataset.page);
+                    if (page) {
+                        switch (containerId) {
+                            case 'allPagination':
+                                allPage = page;
+                                loadAllResources();
+                                break;
+                            case 'myResourcePagination':
+                                myResourcePage = page;
+                                loadMyResources();
+                                break;
+                            case 'favoriteResourcePagination':
+                                favoriteResourcePage = page;
+                                loadFavoriteResources();
+                                break;
+                        }
+                    }
+                });
+            });
+        }
+        
+        // 处理资源文件上传
+        function handleResourceFileUpload(event) {
+            const file = event.target.files[0];
+            const fileInfo = document.getElementById('resourceFileInfo');
+            
+            // 清空文件信息
+            fileInfo.innerHTML = '';
+            uploadedResourceFile = null;
+            
+            if (!file) {
+                return;
+            }
+            
+            // 检查文件大小（限制为100MB）
+            if (file.size > 100 * 1024 * 1024) {
+                showMessage('文件大小不能超过100MB', 'warning');
+                event.target.value = '';
+                return;
+            }
+            
+            // 显示文件信息
+            uploadedResourceFile = file;
+            fileInfo.innerHTML = `
+                <div class="alert alert-info d-flex align-items-center">
+                    <i class="bi bi-file-earmark me-2"></i>
+                    <div>
+                        <strong>${file.name}</strong><br>
+                        <small>大小：${formatFileSize(file.size)}</small>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 提交资源
+        async function submitResource() {
+            const form = document.getElementById('shareResourceForm');
+            const formData = serializeForm(form);
+            
+            // 验证表单
+            if (!formData.categoryId) {
+                showMessage('请选择资源分类', 'warning');
+                return;
+            }
+            
+            if (!formData.type) {
+                showMessage('请选择资源类型', 'warning');
+                return;
+            }
+            
+            if (!formData.title.trim()) {
+                showMessage('请输入资源标题', 'warning');
+                return;
+            }
+            
+            if (!formData.description.trim()) {
+                showMessage('请输入资源描述', 'warning');
+                return;
+            }
+            
+            if (!uploadedResourceFile) {
+                showMessage('请选择要上传的文件', 'warning');
+                return;
+            }
+            
+            try {
+                // 显示加载状态
+                const submitBtn = document.getElementById('submitResourceBtn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '分享中...';
+                submitBtn.disabled = true;
+                
+                // 创建FormData对象用于上传文件
+                const resourceFormData = new FormData();
+                
+                // 添加表单字段
+                Object.keys(formData).forEach(key => {
+                    if (formData[key] !== null && formData[key] !== undefined) {
+                        resourceFormData.append(key, formData[key]);
+                    }
+                });
+                
+                // 添加文件
+                resourceFormData.append('file', uploadedResourceFile);
+                
+                // 发送请求
+                await post('/resource/resources', resourceFormData);
+                
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('shareResourceModal'));
+                modal.hide();
+                
+                // 重置表单
+                form.reset();
+                document.getElementById('resourceFileInfo').innerHTML = '';
+                uploadedResourceFile = null;
+                
+                // 显示成功消息
+                showMessage('资源分享成功', 'success');
+                
+                // 重新加载资源列表
+                loadCurrentTabResources();
+                
+            } catch (error) {
+                console.error('分享资源失败:', error);
+                showMessage(error.message || '分享资源失败，请稍后重试', 'danger');
+            } finally {
+                // 恢复按钮状态
+                const submitBtn = document.getElementById('submitResourceBtn');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // 显示资源详情
+        async function showResourceDetail(resourceId) {
+            try {
+                // 获取资源详情
+                const resource = await get(`/resource/resources/${resourceId}`);
+                
+                // 保存全局变量
+                currentResourceId = resourceId;
+                resourceCategory = resource.categoryId;
+                resourceType = resource.type;
+                
+                // 填充资源详情
+                document.getElementById('detailTitle').textContent = resource.title;
+                document.getElementById('detailCategory').textContent = resource.categoryName;
+                document.getElementById('detailType').textContent = getTypeText(resource.type);
+                document.getElementById('detailDescription').textContent = resource.description;
+                document.getElementById('detailFileSize').textContent = formatFileSize(resource.fileSize);
+                document.getElementById('detailCreateTime').textContent = formatDate(resource.createTime);
+                document.getElementById('detailDownloadCount').textContent = formatNumber(resource.downloadCount);
+                document.getElementById('detailFavoriteCount').textContent = formatNumber(resource.favoriteCount);
+                document.getElementById('detailUploader').textContent = resource.uploaderName;
+                
+                // 设置类型样式
+                const typeBadge = document.getElementById('detailType');
+                typeBadge.className = `badge bg-${getTypeColor(resource.type)}`;
+                
+                // 渲染资源预览
+                renderResourcePreview(resource);
+                
+                // 渲染标签
+                renderResourceTags(resource.tags);
+                
+                // 渲染评分
+                renderResourceRating(resource);
+                
+                // 加载评论
+                loadComments(resourceId);
+                
+                // 设置下载按钮
+                const downloadBtn = document.getElementById('downloadBtn');
+                downloadBtn.onclick = function() {
+                    downloadResource(resourceId);
+                };
+                
+                // 设置收藏按钮
+                const favoriteBtn = document.getElementById('favoriteBtn');
+                favoriteBtn.innerHTML = resource.isFavorited ? 
+                    '<i class="bi bi-heart-fill me-2"></i>已收藏' : 
+                    '<i class="bi bi-heart me-2"></i>收藏';
+                favoriteBtn.onclick = function() {
+                    toggleFavorite(resourceId);
+                };
+                
+                // 设置分享按钮
+                const shareBtn = document.getElementById('shareBtn');
+                shareBtn.onclick = function() {
+                    shareResource(resourceId);
+                };
+                
+                // 设置评分按钮
+                const rateBtn = document.getElementById('rateBtn');
+                rateBtn.onclick = function() {
+                    openRatingModal(resourceId);
+                };
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('resourceDetailModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('获取资源详情失败:', error);
+                showMessage('获取资源详情失败', 'danger');
+            }
+        }
+        
+        // 渲染资源预览
+        function renderResourcePreview(resource) {
+            const container = document.getElementById('resourcePreview');
+            container.innerHTML = getResourcePreview(resource);
+        }
+        
+        // 渲染资源标签
+        function renderResourceTags(tags) {
+            const container = document.getElementById('detailTags');
+            
+            if (!tags || tags.length === 0) {
+                container.innerHTML = '<span class="text-muted">暂无标签</span>';
+                return;
+            }
+            
+            container.innerHTML = tags.map(tag => 
+                `<span class="badge bg-secondary">${tag}</span>`
+            ).join('');
+        }
+        
+        // 渲染资源评分
+        function renderResourceRating(resource) {
+            const container = document.getElementById('detailRating');
+            const textContainer = document.getElementById('detailRatingText');
+            
+            container.innerHTML = renderStars(resource.rating);
+            textContainer.textContent = `${resource.rating.toFixed(1)} (${resource.ratingCount}人评分)`;
+        }
+        
+        // 加载评论
+        async function loadComments(resourceId) {
+            try {
+                const comments = await get(`/resource/resources/${resourceId}/comments`);
+                renderComments(comments);
+            } catch (error) {
+                console.error('加载评论失败:', error);
+                document.getElementById('commentsSection').innerHTML = '<div class="text-muted">加载评论失败</div>';
+            }
+        }
+        
+        // 渲染评论
+        function renderComments(comments) {
+            const container = document.getElementById('commentsSection');
+            
+            if (!comments || comments.length === 0) {
+                container.innerHTML = '<div class="text-muted">暂无评论</div>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="comments-list">
+                    ${comments.map(comment => `
+                        <div class="comment mb-3 p-3 border rounded">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="${comment.avatar || '/images/default-avatar.jpg'}" class="rounded-circle me-2" width="30" height="30">
+                                    <strong>${comment.username}</strong>
+                                </div>
+                                <small class="text-muted">${formatDate(comment.createTime)}</small>
+                            </div>
+                            <div class="comment-content">${comment.content}</div>
+                            <div class="comment-rating text-warning small">
+                                ${renderStars(comment.rating)}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        // 下载资源
+        async function downloadResource(resourceId) {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再下载资源', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 发送下载请求
+                const response = await get(`/resource/resources/${resourceId}/download`);
+                
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.href = response.downloadUrl;
+                link.download = response.filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // 显示成功消息
+                showMessage('下载开始', 'success');
+                
+            } catch (error) {
+                console.error('下载资源失败:', error);
+                showMessage(error.message || '下载资源失败', 'danger');
+            }
+        }
+        
+        // 切换收藏状态
+        async function toggleFavorite(resourceId) {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再收藏资源', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 发送收藏/取消收藏请求
+                await post(`/resource/resources/${resourceId}/favorite`);
+                
+                // 更新按钮状态
+                const favoriteBtn = document.getElementById('favoriteBtn');
+                const isFavorited = favoriteBtn.innerHTML.includes('已收藏');
+                
+                if (isFavorited) {
+                    favoriteBtn.innerHTML = '<i class="bi bi-heart me-2"></i>收藏';
+                    showMessage('已取消收藏', 'info');
+                } else {
+                    favoriteBtn.innerHTML = '<i class="bi bi-heart-fill me-2"></i>已收藏';
+                    showMessage('收藏成功', 'success');
+                }
+                
+            } catch (error) {
+                console.error('收藏操作失败:', error);
+                showMessage(error.message || '收藏操作失败', 'danger');
+            }
+        }
+        
+        // 分享资源
+        function shareResource(resourceId) {
+            // 复制链接到剪贴板
+            const url = `${window.location.origin}/resource/${resourceId}`;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showMessage('链接已复制到剪贴板', 'success');
+                }).catch(() => {
+                    showMessage('复制链接失败，请手动复制', 'warning');
+                });
+            } else {
+                // 降级方案
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showMessage('链接已复制到剪贴板', 'success');
+            }
+        }
+        
+        // 打开评分模态框
+        function openRatingModal(resourceId) {
+            // 检查用户是否登录
+            if (!localStorage.getItem('token')) {
+                showMessage('请先登录后再评分', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1000);
+                return;
+            }
+            
+            // 重置评分
+            selectedRating = 0;
+            updateRatingStars(0);
+            document.getElementById('ratingComment').value = '';
+            
+            // 显示模态框
+            const modal = new bootstrap.Modal(document.getElementById('ratingModal'));
+            modal.show();
+        }
+        
+        // 更新评分星星
+        function updateRatingStars(rating) {
+            document.querySelectorAll('#ratingStars i').forEach((star, index) => {
+                if (index < rating) {
+                    star.className = 'bi bi-star-fill text-warning';
+                } else {
+                    star.className = 'bi bi-star text-muted';
+                }
+            });
+        }
+        
+        // 提交评分
+        async function submitRating() {
+            if (selectedRating === 0) {
+                showMessage('请选择评分', 'warning');
+                return;
+            }
+            
+            try {
+                const comment = document.getElementById('ratingComment').value.trim();
+                
+                // 发送评分请求
+                await post(`/resource/resources/${currentResourceId}/rating`, {
+                    rating: selectedRating,
+                    comment: comment
+                });
+                
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('ratingModal'));
+                modal.hide();
+                
+                // 显示成功消息
+                showMessage('评分成功', 'success');
+                
+                // 重新加载资源详情
+                showResourceDetail(currentResourceId);
+                
+            } catch (error) {
+                console.error('评分失败:', error);
+                showMessage(error.message || '评分失败', 'danger');
+            }
+        }
+        
+        // 获取分类颜色
+        function getCategoryColor(categoryId) {
+            // 这里可以根据分类ID返回不同的颜色
+            return 'secondary';
+        }
+        
+        // 获取类型文本
+        function getTypeText(type) {
+            const typeMap = {
+                'document': '文档',
+                'video': '视频',
+                'audio': '音频',
+                'image': '图片',
+                'software': '软件',
+                'other': '其他'
+            };
+            return typeMap[type] || type;
+        }
+        
+        // 获取类型颜色
+        function getTypeColor(type) {
+            const colorMap = {
+                'document': 'primary',
+                'video': 'danger',
+                'audio': 'success',
+                'image': 'info',
+                'software': 'warning',
+                'other': 'secondary'
+            };
+            return colorMap[type] || 'secondary';
+        }
+        
+        // 渲染星级评分
+        function renderStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="bi bi-star-fill"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="bi bi-star-half"></i>';
+            }
+            
+            const emptyStars = 5 - Math.ceil(rating);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="bi bi-star"></i>';
+            }
+            
+            return stars;
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

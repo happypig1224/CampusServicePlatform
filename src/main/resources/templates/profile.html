@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人资料 - 绥E站</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">绥E站</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><i class="bi bi-house-door me-1"></i>首页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/forum"><i class="bi bi-chat-dots me-1"></i>校园论坛</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/market"><i class="bi bi-shop me-1"></i>二手市场</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lost-found"><i class="bi bi-search me-1"></i>失物招领</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/errand"><i class="bi bi-box-seam me-1"></i>校园跑腿</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/resource"><i class="bi bi-book me-1"></i>资源共享</a>
+                </li>
+            </ul>
+            <div class="user-menu">
+                <a href="/login" class="btn btn-outline-light me-2">登录</a>
+                <a href="/register" class="btn btn-light">注册</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 主要内容 -->
+<div class="container py-4">
+    <div class="row">
+        <!-- 左侧导航 -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <img id="avatar-preview" src="https://picsum.photos/seed/default-avatar/150/150.jpg"
+                             class="rounded-circle img-thumbnail" alt="用户头像" width="150" height="150">
+                    </div>
+                    <h5 id="username-display">用户名</h5>
+                    <p class="text-muted" id="user-phone">未设置手机号</p>
+                    <div class="d-grid">
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#avatarModal">
+                            <i class="bi bi-camera me-1"></i>更换头像
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="list-group list-group-flush">
+                    <a href="#profile-info" class="list-group-item list-group-item-action active" data-bs-toggle="pill">
+                        <i class="bi bi-person me-2"></i>基本信息
+                    </a>
+                    <a href="#account-security" class="list-group-item list-group-item-action" data-bs-toggle="pill">
+                        <i class="bi bi-shield-lock me-2"></i>账户安全
+                    </a>
+                    <a href="#notification-settings" class="list-group-item list-group-item-action"
+                       data-bs-toggle="pill">
+                        <i class="bi bi-bell me-2"></i>通知设置
+                    </a>
+                    <a href="#privacy-settings" class="list-group-item list-group-item-action" data-bs-toggle="pill">
+                        <i class="bi bi-eye-slash me-2"></i>隐私设置
+                    </a>
+                    <a href="/settings" class="list-group-item list-group-item-action">
+                        <i class="bi bi-gear me-2"></i>系统设置
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧内容 -->
+        <div class="col-lg-9">
+            <div class="tab-content">
+                <!-- 基本信息 -->
+                <div class="tab-pane fade show active" id="profile-info">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">基本信息</h5>
+                            <button class="btn btn-sm btn-primary" id="edit-profile-btn">
+                                <i class="bi bi-pencil me-1"></i>编辑资料
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <form id="profile-form">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="username" class="form-label">用户名</label>
+                                        <input type="text" class="form-control" id="username" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="nickname" class="form-label">昵称</label>
+                                        <input type="text" class="form-control" id="nickname" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">手机号</label>
+                                        <input type="tel" class="form-control" id="phone" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="gender" class="form-label">性别</label>
+                                        <select class="form-select" id="gender" disabled>
+                                            <option value="">请选择性别</option>
+                                            <option value="1">男</option>
+                                            <option value="0">女</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="bio" class="form-label">个人简介</label>
+                                    <textarea class="form-control" id="bio" rows="3" readonly></textarea>
+                                </div>
+
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2" id="cancel-edit-btn"
+                                            style="display: none;">
+                                        取消
+                                    </button>
+                                    <button type="submit" class="btn btn-primary" id="save-profile-btn"
+                                            style="display: none;">
+                                        保存修改
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 账户安全 -->
+                <div class="tab-pane fade" id="account-security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">账户安全</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6>修改密码</h6>
+                                <form id="change-password-form">
+                                    <div class="mb-3">
+                                        <label for="current-password" class="form-label">当前密码</label>
+                                        <input type="password" class="form-control" id="current-password" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="new-password" class="form-label">新密码</label>
+                                        <input type="password" class="form-control" id="new-password" required>
+                                        <div class="form-text">密码长度为6-20个字符，必须包含字母和数字</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirm-new-password" class="form-label">确认新密码</label>
+                                        <input type="password" class="form-control" id="confirm-new-password" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">修改密码</button>
+                                </form>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6>绑定手机</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="me-auto">
+                                        <p class="mb-0" id="phone-status">未绑定手机号</p>
+                                        <small class="text-muted">绑定手机号可用于找回密码和接收重要通知</small>
+                                    </div>
+                                    <button class="btn btn-outline-primary" id="bind-phone-btn">绑定手机</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 通知设置 -->
+                <div class="tab-pane fade" id="notification-settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">通知设置</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6>消息通知</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="notif-comment" checked>
+                                    <label class="form-check-label" for="notif-comment">
+                                        有人评论我的帖子
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="notif-like" checked>
+                                    <label class="form-check-label" for="notif-like">
+                                        有人点赞我的帖子
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="notif-follow" checked>
+                                    <label class="form-check-label" for="notif-follow">
+                                        有人关注我
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="notif-system" checked>
+                                    <label class="form-check-label" for="notif-system">
+                                        系统通知
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6>邮件通知</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="email-comment">
+                                    <label class="form-check-label" for="email-comment">
+                                        有人评论我的帖子
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="email-like">
+                                    <label class="form-check-label" for="email-like">
+                                        有人点赞我的帖子
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="email-follow">
+                                    <label class="form-check-label" for="email-follow">
+                                        有人关注我
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="email-system" checked>
+                                    <label class="form-check-label" for="email-system">
+                                        系统通知
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary" id="save-notification-btn">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 隐私设置 -->
+                <div class="tab-pane fade" id="privacy-settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">隐私设置</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <h6>个人资料可见性</h6>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="profile-visibility"
+                                           id="profile-public" checked>
+                                    <label class="form-check-label" for="profile-public">
+                                        公开 - 所有人可见
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="profile-visibility"
+                                           id="profile-registered">
+                                    <label class="form-check-label" for="profile-registered">
+                                        仅注册用户可见
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="profile-visibility"
+                                           id="profile-following">
+                                    <label class="form-check-label" for="profile-following">
+                                        仅关注的人可见
+                                    </label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="profile-visibility"
+                                           id="profile-private">
+                                    <label class="form-check-label" for="profile-private">
+                                        私密 - 仅自己可见
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6>在线状态</h6>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="show-online-status" checked>
+                                    <label class="form-check-label" for="show-online-status">
+                                        显示我的在线状态
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h6>消息接收</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="allow-messages" checked>
+                                    <label class="form-check-label" for="allow-messages">
+                                        允许任何人发送消息
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="allow-followers">
+                                    <label class="form-check-label" for="allow-followers">
+                                        仅允许关注的人发送消息
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-primary" id="save-privacy-btn">保存设置</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 更换头像模态框 -->
+<div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="avatarModalLabel">更换头像</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <img id="avatar-upload-preview" src="https://picsum.photos/seed/default-avatar/150/150.jpg"
+                         class="rounded-circle img-thumbnail" alt="头像预览" width="150" height="150">
+                </div>
+                <div class="mb-3">
+                    <label for="avatar-upload" class="form-label">选择头像文件</label>
+                    <input class="form-control" type="file" id="avatar-upload" accept="image/*">
+                    <div class="form-text">支持 JPG、PNG 格式，文件大小不超过 2MB</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="upload-avatar-btn">上传头像</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 绑定手机模态框 -->
+<div class="modal fade" id="bindPhoneModal" tabindex="-1" aria-labelledby="bindPhoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bindPhoneModalLabel">绑定手机</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="bind-phone-form">
+                    <div class="mb-3">
+                        <label for="phone-number" class="form-label">手机号</label>
+                        <input type="tel" class="form-control" id="phone-number" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone-verify-code" class="form-label">验证码</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="phone-verify-code" required>
+                            <button class="btn btn-outline-secondary" type="button" id="send-phone-code-btn">
+                                发送验证码
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirm-bind-phone-btn">确认绑定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/app.js"></script>
+<script>
+    // 页面加载时检查登录状态并获取用户信息
+    document.addEventListener('DOMContentLoaded', function () {
+        checkLoginStatus();
+
+        // 获取用户信息
+        fetchUserInfo()
+            .then(user => {
+                if (user) {
+                    console.log(user);
+                    // 填充用户信息到表单
+                    document.getElementById('username').value = user.username || '';
+                    document.getElementById('nickname').value = user.nickname || '';
+                    document.getElementById('phone').value = user.phone || '';
+                    document.getElementById('gender').value = user.gender || '';
+                    document.getElementById('bio').value = user.bio || '';
+
+                    // 更新左侧显示
+                    document.getElementById('username-display').textContent = user.nickname || user.username;
+                    document.getElementById('user-phone').textContent = user.phone || '未设置手机号';
+
+                    // 更新头像
+                    if (user.avatar) {
+                        document.getElementById('avatar-preview').src = user.avatar;
+                        document.getElementById('avatar-upload-preview').src = user.avatar;
+                    }
+
+                    // 更新绑定状态
+                    updateBindingStatus(user);
+                }
+            })
+            .catch(error => {
+                console.error('获取用户信息失败:', error);
+                // 不显示错误消息，因为checkLoginStatus已经处理了
+            });
+    });
+
+    // 更新绑定状态
+    function updateBindingStatus(user) {
+        // 更新手机绑定状态
+        const phoneStatus = document.getElementById('phone-status');
+        const bindPhoneBtn = document.getElementById('bind-phone-btn');
+
+        if (user.phone) {
+            phoneStatus.textContent = `已绑定手机号: ${user.phone.substring(0, 3)}****${user.phone.substring(7)}`;
+            bindPhoneBtn.textContent = '更换手机';
+        } else {
+            phoneStatus.textContent = '未绑定手机号';
+            bindPhoneBtn.textContent = '绑定手机';
+        }
+    }
+
+    // 编辑个人资料
+    const editProfileBtn = document.getElementById('edit-profile-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const saveProfileBtn = document.getElementById('save-profile-btn');
+    const profileForm = document.getElementById('profile-form');
+    const formInputs = profileForm.querySelectorAll('input, select, textarea');
+
+    editProfileBtn.addEventListener('click', function () {
+        // 启用表单输入
+        formInputs.forEach(input => {
+            if (input.id !== 'username') { // 用户名不允许修改
+                input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+            }
+        });
+
+        // 切换按钮显示
+        editProfileBtn.style.display = 'none';
+        cancelEditBtn.style.display = 'block';
+        saveProfileBtn.style.display = 'block';
+    });
+
+    cancelEditBtn.addEventListener('click', function () {
+        // 禁用表单输入
+        formInputs.forEach(input => {
+            input.setAttribute('readonly', 'readonly');
+            input.setAttribute('disabled', 'disabled');
+        });
+
+        // 切换按钮显示
+        editProfileBtn.style.display = 'block';
+        cancelEditBtn.style.display = 'none';
+        saveProfileBtn.style.display = 'none';
+    });
+
+    // 保存个人资料
+    profileForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = {
+            nickname: document.getElementById('nickname').value,
+            phone: document.getElementById('phone').value,
+            gender: document.getElementById('gender').value,
+            bio: document.getElementById('bio').value
+        };
+
+        // 发送更新请求
+        apiRequest('/user/profile', {
+            method: 'PUT',
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                showMessage('个人资料更新成功', 'success');
+
+                // 更新左侧显示
+                document.getElementById('username-display').textContent = formData.nickname || document.getElementById('username').value;
+                document.getElementById('user-phone').textContent = formData.phone || '未设置手机号';
+
+                // 禁用表单输入
+                formInputs.forEach(input => {
+                    input.setAttribute('readonly', 'readonly');
+                    input.setAttribute('disabled', 'disabled');
+                });
+
+                // 切换按钮显示
+                editProfileBtn.style.display = 'block';
+                cancelEditBtn.style.display = 'none';
+                saveProfileBtn.style.display = 'none';
+            })
+            .catch(error => {
+                showMessage(error.message || '更新个人资料失败', 'error');
+            });
+    });
+
+    // 修改密码
+    document.getElementById('change-password-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+const confirmPassword = document.getElementById('confirm-new-password').value;
+// 验证新密码
+        if (newPassword.length < 6 || newPassword.length > 20) {
+            showMessage('密码长度为6-20个字符', 'error');
+            return;
+        }
+
+        if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(newPassword)) {
+            showMessage('密码必须包含字母和数字', 'error');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            showMessage('两次输入的密码不一致', 'error');
+            return;
+        }
+
+        // 发送修改密码请求
+        apiRequest('/user/change-password', {
+            method: 'PUT',
+            body: JSON.stringify({
+                currentPassword: currentPassword,
+                newPassword: newPassword
+            })
+        })
+            .then(response => {
+                showMessage('密码修改成功', 'success');
+
+                // 清空表单
+                document.getElementById('current-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-new-password').value = '';
+            })
+            .catch(error => {
+                showMessage(error.message || '密码修改失败', 'error');
+            });
+    });
+
+    // 头像上传预览
+    document.getElementById('avatar-upload').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            // 检查文件大小
+            if (file.size > 2 * 1024 * 1024) {
+                showMessage('头像文件大小不能超过2MB', 'error');
+                e.target.value = '';
+                return;
+            }
+
+            // 检查文件类型
+            if (!file.type.match('image.*')) {
+                showMessage('请选择图片文件', 'error');
+                e.target.value = '';
+                return;
+            }
+
+            // 预览图片
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('avatar-upload-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 上传头像
+    document.getElementById('upload-avatar-btn').addEventListener('click', function () {
+        const fileInput = document.getElementById('avatar-upload');
+        if (!fileInput.files || !fileInput.files[0]) {
+            showMessage('请选择头像文件', 'error');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('avatar', fileInput.files[0]);
+
+        // 禁用按钮
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>上传中...';
+
+        // 发送上传请求
+        apiRequest('/user/avatar', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                showMessage('头像上传成功', 'success');
+
+                // 更新头像显示
+                document.getElementById('avatar-preview').src = response.avatar;
+
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
+                modal.hide();
+
+                // 重置表单
+                fileInput.value = '';
+            })
+            .catch(error => {
+                showMessage(error.message || '头像上传失败', 'error');
+            })
+            .finally(() => {
+                // 恢复按钮
+                this.disabled = false;
+                this.textContent = '上传头像';
+            });
+    });
+
+    // 绑定手机
+    document.getElementById('bind-phone-btn').addEventListener('click', function () {
+        const modal = new bootstrap.Modal(document.getElementById('bindPhoneModal'));
+        modal.show();
+    });
+
+    // 发送手机验证码
+    let phoneCountdown = 0;
+    document.getElementById('send-phone-code-btn').addEventListener('click', function () {
+        const phoneNumber = document.getElementById('phone-number').value;
+
+        if (!phoneNumber) {
+            showMessage('请输入手机号', 'error');
+            return;
+        }
+
+        if (!/^1[3-9]\d{9}$/.test(phoneNumber)) {
+            showMessage('请输入有效的手机号', 'error');
+            return;
+        }
+
+        if (phoneCountdown > 0) {
+            return;
+        }
+
+        // 发送验证码请求
+        apiRequest('/user/send-phone-code', {
+            method: 'POST',
+            body: JSON.stringify({phone: phoneNumber})
+        })
+            .then(response => {
+                showMessage('验证码已发送', 'success');
+
+                // 开始倒计时
+                phoneCountdown = 60;
+                this.disabled = true;
+                const timer = setInterval(() => {
+                    phoneCountdown--;
+                    this.textContent = `${phoneCountdown}秒后重试`;
+
+                    if (phoneCountdown <= 0) {
+                        clearInterval(timer);
+                        this.disabled = false;
+                        this.textContent = '发送验证码';
+                    }
+                }, 1000);
+            })
+            .catch(error => {
+                showMessage(error.message || '发送验证码失败', 'error');
+            });
+    });
+
+    // 确认绑定手机
+    document.getElementById('confirm-bind-phone-btn').addEventListener('click', function () {
+        const phoneNumber = document.getElementById('phone-number').value;
+        const verifyCode = document.getElementById('phone-verify-code').value;
+
+        if (!phoneNumber) {
+            showMessage('请输入手机号', 'error');
+            return;
+        }
+
+        if (!verifyCode) {
+            showMessage('请输入验证码', 'error');
+            return;
+        }
+
+        // 发送绑定请求
+        apiRequest('/user/bind-phone', {
+            method: 'POST',
+            body: JSON.stringify({
+                phone: phoneNumber,
+                code: verifyCode
+            })
+        })
+            .then(response => {
+                showMessage('手机绑定成功', 'success');
+
+                // 更新绑定状态
+                updateBindingStatus(response.user);
+
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('bindPhoneModal'));
+                modal.hide();
+
+                // 重置表单
+                document.getElementById('bind-phone-form').reset();
+            })
+            .catch(error => {
+                showMessage(error.message || '手机绑定失败', 'error');
+            });
+    });
+
+    // 保存通知设置
+    document.getElementById('save-notification-btn').addEventListener('click', function () {
+        const notificationSettings = {
+            notifComment: document.getElementById('notif-comment').checked,
+            notifLike: document.getElementById('notif-like').checked,
+            notifFollow: document.getElementById('notif-follow').checked,
+            notifSystem: document.getElementById('notif-system').checked,
+            emailComment: document.getElementById('email-comment').checked,
+            emailLike: document.getElementById('email-like').checked,
+            emailFollow: document.getElementById('email-follow').checked,
+            emailSystem: document.getElementById('email-system').checked
+        };
+
+        // 发送设置请求
+        apiRequest('/user/notification-settings', {
+            method: 'PUT',
+            body: JSON.stringify(notificationSettings)
+        })
+            .then(response => {
+                showMessage('通知设置保存成功', 'success');
+            })
+            .catch(error => {
+                showMessage(error.message || '保存通知设置失败', 'error');
+            });
+    });
+
+    // 保存隐私设置
+    document.getElementById('save-privacy-btn').addEventListener('click', function () {
+        const privacySettings = {
+            profileVisibility: document.querySelector('input[name="profile-visibility"]:checked').id.replace('profile-', ''),
+            showOnlineStatus: document.getElementById('show-online-status').checked,
+            allowMessages: document.getElementById('allow-messages').checked,
+            allowFollowers: document.getElementById('allow-followers').checked
+        };
+
+        // 发送设置请求
+        apiRequest('/user/privacy-settings', {
+            method: 'PUT',
+            body: JSON.stringify(privacySettings)
+        })
+            .then(response => {
+                showMessage('隐私设置保存成功', 'success');
+            })
+            .catch(error => {
+                showMessage(error.message || '保存隐私设置失败', 'error');
+            });
+    });
+
+    // 页面初始化函数
+    async function pageInit() {
+        // 检查登录状态并更新用户菜单
+        await checkLoginStatus();
+
+        // 加载用户资料
+        await loadUserProfile();
+    }
+
+    // 加载用户资料
+    async function loadUserProfile() {
+        // 首先尝试从session获取用户信息
+        try {
+            const response = await fetch('/api/user/info', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.code === 200 && result.data) {
+                    console.log('从session获取用户信息成功:', result.data);
+                    fillUserProfile(result.data);
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('从session获取用户信息失败:', error);
+        }
+
+        // 如果session中没有用户信息，尝试使用token获取
+        fetchUserInfo()
+            .then(user => {
+                if (user) {
+                    fillUserProfile(user);
+                }
+            })
+            .catch(error => {
+                console.error('获取用户信息失败:', error);
+                // 不显示错误消息，因为checkLoginStatus已经处理了
+            });
+    }
+
+    // 填充用户信息到页面
+    function fillUserProfile(user) {
+        console.log('fillUserProfile被调用，用户数据:', user);
+        
+        // 填充用户信息到表单
+        document.getElementById('username').value = user.username || '';
+        document.getElementById('nickname').value = user.nickname || '';
+        document.getElementById('phone').value = user.phone || '';
+        
+        // 设置性别值 - 先启用选择器，然后设置值，再禁用
+        const genderSelect = document.getElementById('gender');
+        console.log('性别选择器元素:', genderSelect);
+        console.log('用户性别值:', user.gender, '类型:', typeof user.gender);
+        
+        genderSelect.disabled = false; // 临时启用选择器
+        
+        // 修复：正确处理数字0的情况
+        const genderValue = user.gender !== null && user.gender !== undefined ? String(user.gender) : '';
+        console.log('设置的性别值:', genderValue, '类型:', typeof genderValue);
+        
+        genderSelect.value = genderValue;
+        console.log('设置后的选择器值:', genderSelect.value);
+        
+        // 检查是否成功选中
+        const selectedOption = genderSelect.options[genderSelect.selectedIndex];
+        console.log('选中的选项:', selectedOption);
+        
+        genderSelect.disabled = true; // 重新禁用选择器
+
+        // 更新左侧显示
+        document.getElementById('username-display').textContent = user.nickname || user.username;
+        document.getElementById('user-phone').textContent = user.phone || '未设置手机号';
+
+        // 更新头像
+        if (user.avatar) {
+            document.getElementById('avatar-preview').src = user.avatar;
+            document.getElementById('avatar-upload-preview').src = user.avatar;
+        }
+
+        // 更新绑定状态
+        updateBindingStatus(user);
+    }
+
+    // 页面加载完成后执行初始化
+    document.addEventListener('DOMContentLoaded', pageInit);
+</script>
+</body>
+</html>

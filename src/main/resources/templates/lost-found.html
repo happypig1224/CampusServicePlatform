@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>失物招领 - 绥E站</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <a href="/" class="logo">绥E站</a>
+                
+                <ul class="nav-links">
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/forum">校园论坛</a></li>
+                    <li><a href="/market">二手市场</a></li>
+                    <li><a href="/lost-found" class="active">失物招领</a></li>
+                    <li><a href="/errand">校园跑腿</a></li>
+                    <li><a href="/resource">资源共享</a></li>
+                </ul>
+                
+                <div class="user-menu">
+                    <a href="/login" class="btn btn-primary">登录</a>
+                    <a href="/register" class="btn btn-outline">注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="main-content">
+        <div class="container">
+            <!-- 搜索和筛选 -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="searchInput" placeholder="搜索物品名称、地点...">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="typeSelect">
+                                <option value="">全部类型</option>
+                                <option value="LOST">失物</option>
+                                <option value="FOUND">招领</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="categorySelect">
+                                <option value="">全部分类</option>
+                                <!-- 分类选项将通过JavaScript动态加载 -->
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select" id="sortSelect">
+                                <option value="latest">最新发布</option>
+                                <option value="popular">最受欢迎</option>
+                                <option value="resolved">已解决</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary w-100" id="searchBtn">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 发布按钮 -->
+            <div class="row mb-4">
+                <div class="col-12 text-end">
+                    <button class="btn btn-outline-primary me-2" id="publishLostBtn">发布失物</button>
+                    <button class="btn btn-primary" id="publishFoundBtn">发布招领</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- 左侧分类导航 -->
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">物品分类</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush" id="categoryList">
+                                <!-- 分类列表将通过JavaScript动态加载 -->
+                                <div class="text-center py-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 最新动态 -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">最新动态</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush" id="latestList">
+                                <!-- 最新动态将通过JavaScript动态加载 -->
+                                <div class="text-center py-3">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 中间物品列表 -->
+                <div class="col-md-9">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0" id="categoryTitle">全部物品</h5>
+                            <div class="btn-group" role="group">
+                                <input type="radio" class="btn-check" name="viewMode" id="gridView" autocomplete="off" checked>
+                                <label class="btn btn-outline-secondary" for="gridView">
+                                    <i class="bi bi-grid-3x3-gap"></i>
+                                </label>
+                                
+                                <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
+                                <label class="btn btn-outline-secondary" for="listView">
+                                    <i class="bi bi-list"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- 物品列表 -->
+                            <div id="itemList" class="row g-4">
+                                <!-- 物品列表将通过JavaScript动态加载 -->
+                                <div class="col-12 text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">加载中...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 分页 -->
+                            <div class="d-flex justify-content-center mt-4">
+                                <nav aria-label="物品分页">
+                                    <ul class="pagination" id="pagination">
+                                        <!-- 分页将通过JavaScript动态生成 -->
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 发布失物模态框 -->
+    <div class="modal fade" id="publishLostModal" tabindex="-1" aria-labelledby="publishLostModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="publishLostModalLabel">发布失物</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="publishLostForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lostCategory" class="form-label">物品分类 <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="lostCategory" name="categoryId" required>
+                                        <option value="">请选择分类</option>
+                                        <!-- 分类选项将通过JavaScript动态加载 -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lostTime" class="form-label">丢失时间 <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="lostTime" name="lostTime" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lostTitle" class="form-label">物品名称 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="lostTitle" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lostDescription" class="form-label">详细描述 <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="lostDescription" name="description" rows="5" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lostLocation" class="form-label">丢失地点 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lostLocation" name="location" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lostContact" class="form-label">联系方式 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lostContact" name="contact" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lostReward" class="form-label">悬赏金额 (元)</label>
+                            <input type="number" class="form-control" id="lostReward" name="reward" min="0" step="0.01">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lostImages" class="form-label">物品图片</label>
+                            <input type="file" class="form-control" id="lostImages" multiple accept="image/*">
+                            <div class="form-text">上传物品照片有助于更快找回</div>
+                            <div id="lostImagePreview" class="mt-2 d-flex flex-wrap gap-2">
+                                <!-- 图片预览区域 -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitLostBtn">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 发布招领模态框 -->
+    <div class="modal fade" id="publishFoundModal" tabindex="-1" aria-labelledby="publishFoundModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="publishFoundModalLabel">发布招领</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="publishFoundForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="foundCategory" class="form-label">物品分类 <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="foundCategory" name="categoryId" required>
+                                        <option value="">请选择分类</option>
+                                        <!-- 分类选项将通过JavaScript动态加载 -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="foundTime" class="form-label">拾获时间 <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="foundTime" name="foundTime" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foundTitle" class="form-label">物品名称 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="foundTitle" name="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foundDescription" class="form-label">详细描述 <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="foundDescription" name="description" rows="5" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="foundLocation" class="form-label">拾获地点 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="foundLocation" name="location" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="foundContact" class="form-label">联系方式 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="foundContact" name="contact" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="foundStorage" class="form-label">存放地点</label>
+                            <input type="text" class="form-control" id="foundStorage" name="storage" placeholder="如：XX大学保卫处">
+                        </div>
+                        <div class="mb-3">
+                            <label for="foundImages" class="form-label">物品图片</label>
+                            <input type="file" class="form-control" id="foundImages" multiple accept="image/*">
+                            <div class="form-text">上传物品照片有助于失主辨认</div>
+                            <div id="foundImagePreview" class="mt-2 d-flex flex-wrap gap-2">
+                                <!-- 图片预览区域 -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="submitFoundBtn">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 物品详情模态框 -->
+    <div class="modal fade" id="itemDetailModal" tabindex="-1" aria-labelledby="itemDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="itemDetailModalLabel">物品详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="itemImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner" id="itemCarouselInner">
+                                    <!-- 物品图片将通过JavaScript动态加载 -->
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#itemImageCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#itemImageCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h4 id="detailTitle"></h4>
+                                <div>
+                                    <span class="badge bg-${getTypeColor(itemType)} me-2" id="detailType"></span>
+                                    <span class="badge bg-${getStatusColor(itemStatus)}" id="detailStatus"></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <span class="badge bg-secondary me-2" id="detailCategory"></span>
+                            </div>
+                            <div class="mb-3">
+                                <p id="detailDescription"></p>
+                            </div>
+                            <div class="mb-3">
+                                <p><strong>${itemType === 'LOST' ? '丢失' : '拾获'}时间：</strong><span id="detailTime"></span></p>
+                                <p><strong>${itemType === 'LOST' ? '丢失' : '拾获'}地点：</strong><span id="detailLocation"></span></p>
+                                <p><strong>联系方式：</strong><span id="detailContact"></span></p>
+                                ${itemType === 'FOUND' ? '<p><strong>存放地点：</strong><span id="detailStorage"></span></p>' : ''}
+                                ${itemType === 'LOST' ? '<p><strong>悬赏金额：</strong><span id="detailReward"></span></p>' : ''}
+                                <p><strong>发布时间：</strong><span id="detailCreateTime"></span></p>
+                                <p><strong>浏览次数：</strong><span id="detailViewCount"></span></p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary" id="contactBtn">联系发布者</button>
+                                ${itemType === 'LOST' ? '<button class="btn btn-success" id="claimBtn">认领物品</button>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        // 全局变量
+        let currentCategory = null;
+        let currentType = null;
+        let currentPage = 1;
+        let currentSort = 'latest';
+        let currentKeyword = '';
+        let viewMode = 'grid'; // grid 或 list
+        let itemType = null; // LOST 或 FOUND
+        let itemStatus = null; // RESOLVED 或 PENDING
+        let uploadedLostImages = [];
+        let uploadedFoundImages = [];
+        
+        // 页面初始化函数
+        function pageInit() {
+            // 加载分类列表
+            loadCategories();
+            
+            // 加载最新动态
+            loadLatestItems();
+            
+            // 加载物品列表
+            loadItems();
+            
+            // 绑定事件
+            bindEvents();
+        }
+        
+        // 绑定事件
+        function bindEvents() {
+            // 搜索
+            document.getElementById('searchBtn').addEventListener('click', function() {
+                currentKeyword = document.getElementById('searchInput').value.trim();
+                currentPage = 1;
+                loadItems();
+            });
+            
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    currentKeyword = this.value.trim();
+                    currentPage = 1;
+                    loadItems();
+                }
+            });
+            
+            // 类型筛选
+            document.getElementById('typeSelect').addEventListener('change', function() {
+                currentType = this.value ? this.value : null;
+                currentPage = 1;
+                loadItems();
+            });
+            
+            // 分类筛选
+            document.getElementById('categorySelect').addEventListener('change', function() {
+                currentCategory = this.value ? parseInt(this.value) : null;
+                currentPage = 1;
+                loadItems();
+            });
+            
+            // 排序
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                currentPage = 1;
+                loadItems();
+            });
+            
+            // 视图模式切换
+            document.querySelectorAll('input[name="viewMode"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    viewMode = this.id;
+                    renderItems(window.currentItems || []);
+                });
+            });
+            
+            // 发布失物按钮
+            document.getElementById('publishLostBtn').addEventListener('click', function() {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再发布失物', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 打开发布失物模态框
+                const modal = new bootstrap.Modal(document.getElementById('publishLostModal'));
+                modal.show();
+                
+                // 加载分类选项
+                loadCategoryOptions('lostCategory');
+            });
+            
+            // 发布招领按钮
+            document.getElementById('publishFoundBtn').addEventListener('click', function() {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再发布招领', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 打开发布招领模态框
+                const modal = new bootstrap.Modal(document.getElementById('publishFoundModal'));
+                modal.show();
+                
+                // 加载分类选项
+                loadCategoryOptions('foundCategory');
+            });
+            
+            // 失物图片上传
+            document.getElementById('lostImages').addEventListener('change', function() {
+                handleImageUpload(this, 'lostImagePreview', uploadedLostImages);
+            });
+            
+            // 招领图片上传
+            document.getElementById('foundImages').addEventListener('change', function() {
+                handleImageUpload(this, 'foundImagePreview', uploadedFoundImages);
+            });
+            
+            // 提交失物
+            document.getElementById('submitLostBtn').addEventListener('click', submitLost);
+            
+            // 提交招领
+            document.getElementById('submitFoundBtn').addEventListener('click', submitFound);
+        }
+        
+        // 加载分类列表
+        async function loadCategories() {
+            try {
+                const categories = await get('/lost-found/categories');
+                renderCategories(categories);
+                renderCategoryOptions(categories);
+            } catch (error) {
+                console.error('加载分类列表失败:', error);
+                document.getElementById('categoryList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
+            }
+        }
+        
+        // 渲染分类列表
+        function renderCategories(categories) {
+            const container = document.getElementById('categoryList');
+            
+            // 添加"全部物品"选项
+            let html = `
+                <a href="#" class="list-group-item list-group-item-action ${!currentCategory ? 'active' : ''}" data-category-id="">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>全部物品
+                </a>
+            `;
+            
+            // 添加分类
+            categories.forEach(category => {
+                html += `
+                    <a href="#" class="list-group-item list-group-item-action ${currentCategory === category.id ? 'active' : ''}" 
+                       data-category-id="${category.id}">
+                        <i class="bi ${category.icon || 'bi-tag'} me-2"></i>${category.name}
+                        <span class="badge bg-secondary rounded-pill float-end">${category.itemCount || 0}</span>
+                    </a>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // 绑定点击事件
+            container.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 更新活动状态
+                    container.querySelectorAll('a').forEach(item => item.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新当前分类
+                    currentCategory = this.dataset.categoryId ? parseInt(this.dataset.categoryId) : null;
+                    currentPage = 1;
+                    
+                    // 更新标题
+                    const categoryName = this.textContent.trim().split('\n')[0];
+                    document.getElementById('categoryTitle').textContent = categoryName;
+                    document.getElementById('categorySelect').value = currentCategory || '';
+                    
+                    // 重新加载物品
+                    loadItems();
+                });
+            });
+        }
+        
+        // 渲染分类选项
+        function renderCategoryOptions(categories) {
+            const select = document.getElementById('categorySelect');
+            
+            let html = '<option value="">全部分类</option>';
+            categories.forEach(category => {
+                html += `<option value="${category.id}">${category.name}</option>`;
+            });
+            
+            select.innerHTML = html;
+        }
+        
+        // 加载分类选项（用于发布物品）
+        async function loadCategoryOptions(selectId) {
+            try {
+                const categories = await get('/lost-found/categories');
+                const select = document.getElementById(selectId);
+                
+                let html = '<option value="">请选择分类</option>';
+                categories.forEach(category => {
+                    html += `<option value="${category.id}">${category.name}</option>`;
+                });
+                
+                select.innerHTML = html;
+            } catch (error) {
+                console.error('加载分类选项失败:', error);
+            }
+        }
+        
+        // 加载最新动态
+        async function loadLatestItems() {
+            try {
+                const items = await get('/lost-found/latest', { limit: 10 });
+                renderLatestItems(items);
+            } catch (error) {
+                console.error('加载最新动态失败:', error);
+                document.getElementById('latestList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
+            }
+        }
+        
+        // 渲染最新动态
+        function renderLatestItems(items) {
+            const container = document.getElementById('latestList');
+            
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="p-3 text-muted">暂无最新动态</div>';
+                return;
+            }
+            
+            container.innerHTML = items.map(item => `
+                <a href="#" class="list-group-item list-group-item-action item-item" data-item-id="${item.id}">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1">${item.title}</h6>
+                        <span class="badge bg-${getTypeColor(item.type)} me-1">${getTypeText(item.type)}</span>
+                    </div>
+                    <p class="mb-1 text-truncate">${item.description}</p>
+                    <small>${item.categoryName} · ${formatDate(item.createTime)}</small>
+                </a>
+            `).join('');
+            
+            // 绑定点击事件
+            container.querySelectorAll('.item-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const itemId = this.dataset.itemId;
+                    showItemDetail(itemId);
+                });
+            });
+        }
+        
+        // 加载物品列表
+        async function loadItems() {
+            try {
+                // 显示加载状态
+                document.getElementById('itemList').innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                `;
+                
+                // 构建请求参数
+                const params = {
+                    page: currentPage,
+                    limit: 12,
+                    sort: currentSort
+                };
+                
+                if (currentCategory) {
+                    params.categoryId = currentCategory;
+                }
+                
+                if (currentType) {
+                    params.type = currentType;
+                }
+                
+                if (currentKeyword) {
+                    params.keyword = currentKeyword;
+                }
+                
+                // 发送请求
+                const response = await get('/lost-found/items', params);
+                
+                // 保存当前物品数据
+                window.currentItems = response.items;
+                
+                // 渲染物品列表
+                renderItems(response.items);
+                
+                // 渲染分页
+                renderPagination(response.pagination);
+                
+            } catch (error) {
+                console.error('加载物品列表失败:', error);
+                document.getElementById('itemList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+            }
+        }
+        
+        // 渲染物品列表
+        function renderItems(items) {
+            const container = document.getElementById('itemList');
+            
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center py-5 text-muted">暂无物品</div>';
+                return;
+            }
+            
+            // 根据视图模式渲染
+            if (viewMode === 'grid') {
+                container.className = 'row g-4';
+                container.innerHTML = items.map(item => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 item-item" data-item-id="${item.id}">
+                            <div class="item-image-container position-relative">
+                                ${item.images && item.images.length > 0 ? 
+                                    `<img src="${item.images[0]}" class="card-img-top item-image" alt="${item.title}">` :
+                                    `<img src="/images/default-item.jpg" class="card-img-top item-image" alt="${item.title}">`
+                                }
+                                <div class="position-absolute top-0 start-0 m-2">
+                                    <span class="badge bg-${getTypeColor(item.type)}">${getTypeText(item.type)}</span>
+                                </div>
+                                <div class="position-absolute top-0 end-0 m-2">
+                                    <span class="badge bg-${getStatusColor(item.status)}">${getStatusText(item.status)}</span>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${item.title}</h5>
+                                <p class="card-text text-truncate">${item.description}</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="badge bg-secondary">${item.categoryName}</span>
+                                        ${item.type === 'LOST' && item.reward ? `<span class="text-danger">悬赏: ¥${item.reward}</span>` : ''}
+                                    </div>
+                                    <div class="d-flex justify-content-between text-muted small">
+                                        <span><i class="bi bi-eye me-1"></i>${formatNumber(item.viewCount)}</span>
+                                        <span>${formatDate(item.createTime)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.className = '';
+                container.innerHTML = items.map(item => `
+                    <div class="card mb-3 item-item" data-item-id="${item.id}">
+                        <div class="row g-0">
+                            <div class="col-md-3">
+                                ${item.images && item.images.length > 0 ? 
+                                    `<img src="${item.images[0]}" class="img-fluid rounded-start h-100 object-fit-cover" alt="${item.title}">` :
+                                    `<img src="/images/default-item.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="${item.title}">`
+                                }
+                            </div>
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h5 class="card-title">${item.title}</h5>
+                                            <p class="card-text text-truncate">${item.description}</p>
+                                        </div>
+                                        <div class="text-end">
+                                            <div>
+                                                <span class="badge bg-${getTypeColor(item.type)} me-1">${getTypeText(item.type)}</span>
+                                                <span class="badge bg-${getStatusColor(item.status)}">${getStatusText(item.status)}</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <span class="badge bg-secondary">${item.categoryName}</span>
+                                                ${item.type === 'LOST' && item.reward ? `<div class="text-danger mt-1">悬赏: ¥${item.reward}</div>` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <div class="text-muted small">
+                                            <span><i class="bi bi-eye me-1"></i>${formatNumber(item.viewCount)}</span>
+                                            <span class="ms-3">${formatDate(item.createTime)}</span>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-sm btn-outline-primary me-2 contact-btn" data-item-id="${item.id}">联系发布者</button>
+                                            ${item.type === 'LOST' && item.status === 'PENDING' ? `<button class="btn btn-sm btn-success claim-btn" data-item-id="${item.id}">认领物品</button>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // 绑定物品点击事件
+            container.querySelectorAll('.item-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // 如果点击的是按钮，不触发物品详情
+                    if (e.target.classList.contains('btn')) return;
+                    
+                    const itemId = this.dataset.itemId;
+                    showItemDetail(itemId);
+                });
+            });
+            
+            // 绑定联系按钮事件
+            container.querySelectorAll('.contact-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const itemId = this.dataset.itemId;
+                    contactPublisher(itemId);
+                });
+            });
+            
+            // 绑定认领按钮事件
+            container.querySelectorAll('.claim-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const itemId = this.dataset.itemId;
+                    claimItem(itemId);
+                });
+            });
+        }
+        
+        // 渲染分页
+        function renderPagination(pagination) {
+            const container = document.getElementById('pagination');
+            
+            if (!pagination || pagination.totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // 上一页
+            if (pagination.hasPrev) {
+                html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${pagination.prevPage}">上一页</a>
+                </li>`;
+            }
+            
+            // 页码
+            for (let i = 1; i <= pagination.totalPages; i++) {
+                if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)) {
+                    html += `<li class="page-item ${i === pagination.currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>`;
+                } else if (i === pagination.currentPage - 3 || i === pagination.currentPage + 3) {
+                    html += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
+                }
+            }
+            
+            // 下一页
+            if (pagination.hasNext) {
+                html += `<li class="page-item">
+                    <a class="page-link" href="#" data-page="${pagination.nextPage}">下一页</a>
+                </li>`;
+            }
+            
+            container.innerHTML = html;
+            
+            // 绑定点击事件
+            container.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = parseInt(this.dataset.page);
+                    if (page && page !== currentPage) {
+                        currentPage = page;
+                        loadItems();
+                    }
+                });
+            });
+        }
+        
+        // 处理图片上传
+        function handleImageUpload(input, previewId, uploadedImages) {
+            const files = input.files;
+            const preview = document.getElementById(previewId);
+            
+            // 清空预览和已上传图片列表
+            preview.innerHTML = '';
+            uploadedImages.length = 0;
+            
+            // 处理每个文件
+            Array.from(files).forEach(file => {
+                // 检查文件类型
+                if (!file.type.startsWith('image/')) {
+                    showMessage('只能上传图片文件', 'warning');
+                    return;
+                }
+                
+                // 检查文件大小（限制为5MB）
+                if (file.size > 5 * 1024 * 1024) {
+                    showMessage('图片大小不能超过5MB', 'warning');
+                    return;
+                }
+                
+                // 创建预览
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'position-relative';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" data-index="${uploadedImages.length}">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    `;
+                    preview.appendChild(div);
+                    
+                    // 添加到已上传图片列表
+                    uploadedImages.push({
+                        file: file,
+                        url: e.target.result
+                    });
+                    
+                    // 绑定删除按钮事件
+                    div.querySelector('button').addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        uploadedImages.splice(index, 1);
+                        div.remove();
+                        
+                        // 更新剩余按钮的索引
+                        preview.querySelectorAll('button').forEach((btn, i) => {
+                            btn.dataset.index = i;
+                        });
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // 提交失物
+        async function submitLost() {
+            const form = document.getElementById('publishLostForm');
+            const formData = serializeForm(form);
+            
+            // 验证表单
+            if (!formData.categoryId) {
+                showMessage('请选择物品分类', 'warning');
+                return;
+            }
+            
+            if (!formData.title.trim()) {
+                showMessage('请输入物品名称', 'warning');
+                return;
+            }
+            
+            if (!formData.description.trim()) {
+                showMessage('请输入详细描述', 'warning');
+                return;
+            }
+            
+            if (!formData.lostTime) {
+                showMessage('请选择丢失时间', 'warning');
+                return;
+            }
+            
+            if (!formData.location.trim()) {
+                showMessage('请输入丢失地点', 'warning');
+                return;
+            }
+            
+            if (!formData.contact.trim()) {
+                showMessage('请输入联系方式', 'warning');
+                return;
+            }
+            
+            try {
+                // 显示加载状态
+                const submitBtn = document.getElementById('submitLostBtn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '发布中...';
+                submitBtn.disabled = true;
+                
+                // 创建FormData对象用于上传文件
+                const lostFormData = new FormData();
+                
+                // 添加表单字段
+                Object.keys(formData).forEach(key => {
+                    if (formData[key] !== null && formData[key] !== undefined) {
+                        lostFormData.append(key, formData[key]);
+                    }
+                });
+                
+                // 添加类型
+                lostFormData.append('type', 'LOST');
+                
+                // 添加图片文件
+                uploadedLostImages.forEach(image => {
+                    lostFormData.append('images', image.file);
+                });
+                
+                // 发送请求
+                await post('/lost-found/items', lostFormData);
+                
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('publishLostModal'));
+                modal.hide();
+                
+                // 重置表单
+                form.reset();
+                document.getElementById('lostImagePreview').innerHTML = '';
+                uploadedLostImages = [];
+                
+                // 显示成功消息
+                showMessage('失物发布成功', 'success');
+                
+                // 重新加载物品列表
+                loadItems();
+                
+            } catch (error) {
+                console.error('发布失物失败:', error);
+                showMessage(error.message || '发布失物失败，请稍后重试', 'danger');
+            } finally {
+                // 恢复按钮状态
+                const submitBtn = document.getElementById('submitLostBtn');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // 提交招领
+        async function submitFound() {
+            const form = document.getElementById('publishFoundForm');
+            const formData = serializeForm(form);
+            
+            // 验证表单
+            if (!formData.categoryId) {
+                showMessage('请选择物品分类', 'warning');
+                return;
+            }
+            
+            if (!formData.title.trim()) {
+                showMessage('请输入物品名称', 'warning');
+                return;
+            }
+            
+            if (!formData.description.trim()) {
+                showMessage('请输入详细描述', 'warning');
+                return;
+            }
+            
+            if (!formData.foundTime) {
+                showMessage('请选择拾获时间', 'warning');
+                return;
+            }
+            
+            if (!formData.location.trim()) {
+                showMessage('请输入拾获地点', 'warning');
+                return;
+            }
+            
+            if (!formData.contact.trim()) {
+                showMessage('请输入联系方式', 'warning');
+                return;
+            }
+            
+            try {
+                // 显示加载状态
+                const submitBtn = document.getElementById('submitFoundBtn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '发布中...';
+                submitBtn.disabled = true;
+                
+                // 创建FormData对象用于上传文件
+                const foundFormData = new FormData();
+                
+                // 添加表单字段
+                Object.keys(formData).forEach(key => {
+                    if (formData[key] !== null && formData[key] !== undefined) {
+                        foundFormData.append(key, formData[key]);
+                    }
+                });
+                
+                // 添加类型
+                foundFormData.append('type', 'FOUND');
+                
+                // 添加图片文件
+                uploadedFoundImages.forEach(image => {
+                    foundFormData.append('images', image.file);
+                });
+                
+                // 发送请求
+                await post('/lost-found/items', foundFormData);
+                
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('publishFoundModal'));
+                modal.hide();
+                
+                // 重置表单
+                form.reset();
+                document.getElementById('foundImagePreview').innerHTML = '';
+                uploadedFoundImages = [];
+                
+                // 显示成功消息
+                showMessage('招领发布成功', 'success');
+                
+                // 重新加载物品列表
+                loadItems();
+                
+            } catch (error) {
+                console.error('发布招领失败:', error);
+                showMessage(error.message || '发布招领失败，请稍后重试', 'danger');
+            } finally {
+                // 恢复按钮状态
+                const submitBtn = document.getElementById('submitFoundBtn');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // 显示物品详情
+        async function showItemDetail(itemId) {
+            try {
+                // 获取物品详情
+                const item = await get(`/lost-found/items/${itemId}`);
+                
+                // 保存全局变量
+                itemType = item.type;
+                itemStatus = item.status;
+                
+                // 填充物品详情
+                document.getElementById('detailTitle').textContent = item.title;
+                document.getElementById('detailType').textContent = getTypeText(item.type);
+                document.getElementById('detailStatus').textContent = getStatusText(item.status);
+                document.getElementById('detailCategory').textContent = item.categoryName;
+                document.getElementById('detailDescription').textContent = item.description;
+                document.getElementById('detailTime').textContent = formatDate(item.type === 'LOST' ? item.lostTime : item.foundTime);
+                document.getElementById('detailLocation').textContent = item.location;
+                document.getElementById('detailContact').textContent = item.contact;
+                document.getElementById('detailCreateTime').textContent = formatDate(item.createTime);
+                document.getElementById('detailViewCount').textContent = formatNumber(item.viewCount);
+                
+                // 根据类型填充特定字段
+                if (item.type === 'FOUND') {
+                    document.getElementById('detailStorage').textContent = item.storage || '未提供';
+                } else {
+                    document.getElementById('detailReward').textContent = item.reward ? `¥${item.reward}` : '无';
+                }
+                
+                // 设置状态样式
+                const statusBadge = document.getElementById('detailStatus');
+                statusBadge.className = `badge bg-${getStatusColor(item.status)}`;
+                
+                // 渲染物品图片
+                renderItemImages(item.images);
+                
+                // 设置联系按钮
+                const contactBtn = document.getElementById('contactBtn');
+                contactBtn.onclick = function() {
+                    contactPublisher(itemId);
+                };
+                
+                // 设置认领按钮
+                const claimBtn = document.getElementById('claimBtn');
+                if (item.type === 'LOST' && item.status === 'PENDING') {
+                    claimBtn.style.display = 'block';
+                    claimBtn.onclick = function() {
+                        claimItem(itemId);
+                    };
+                } else {
+                    claimBtn.style.display = 'none';
+                }
+                
+                // 显示模态框
+                const modal = new bootstrap.Modal(document.getElementById('itemDetailModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('获取物品详情失败:', error);
+                showMessage('获取物品详情失败', 'danger');
+            }
+        }
+        
+        // 渲染物品图片
+        function renderItemImages(images) {
+            const container = document.getElementById('itemCarouselInner');
+            
+            if (!images || images.length === 0) {
+                container.innerHTML = `
+                    <div class="carousel-item active">
+                        <img src="/images/default-item.jpg" class="d-block w-100" alt="物品图片">
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = images.map((image, index) => `
+                <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                    <img src="${image}" class="d-block w-100" alt="物品图片${index + 1}">
+                </div>
+            `).join('');
+        }
+        
+        // 获取类型文本
+        function getTypeText(type) {
+            return type === 'LOST' ? '失物' : '招领';
+        }
+        
+        // 获取类型颜色
+        function getTypeColor(type) {
+            return type === 'LOST' ? 'danger' : 'success';
+        }
+        
+        // 获取状态文本
+        function getStatusText(status) {
+            return status === 'RESOLVED' ? '已解决' : '待解决';
+        }
+        
+        // 获取状态颜色
+        function getStatusColor(status) {
+            return status === 'RESOLVED' ? 'success' : 'warning';
+        }
+        
+        // 联系发布者
+        async function contactPublisher(itemId) {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再联系发布者', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 获取物品详情
+                const item = await get(`/lost-found/items/${itemId}`);
+                
+                // 显示联系方式
+                showMessage(`联系方式：${item.contact}`, 'info');
+                
+            } catch (error) {
+                console.error('获取联系方式失败:', error);
+                showMessage('获取联系方式失败', 'danger');
+            }
+        }
+        
+        // 认领物品
+        async function claimItem(itemId) {
+            try {
+                // 检查用户是否登录
+                if (!localStorage.getItem('token')) {
+                    showMessage('请先登录后再认领物品', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    return;
+                }
+                
+                // 获取物品详情
+                const item = await get(`/lost-found/items/${itemId}`);
+                
+                // 确认认领
+                if (!confirm(`确认认领「${item.title}」？认领后请联系发布者确认物品信息。`)) {
+                    return;
+                }
+                
+                // 发送认领请求
+                await post(`/lost-found/items/${itemId}/claim`);
+                
+                // 显示成功消息
+                showMessage('认领成功，请联系发布者确认物品信息', 'success');
+                
+                // 重新加载物品列表
+                loadItems();
+                
+            } catch (error) {
+                console.error('认领物品失败:', error);
+                showMessage(error.message || '认领物品失败', 'danger');
+            }
+        }
+    </script>
+</body>
+</html>

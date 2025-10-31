@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 绥E站</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card mt-5">
+                    <div class="card-header text-center">
+                        <h3>注册绥E站</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">用户名</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                                <div class="form-text">用户名长度为4-20个字符，只能包含字母、数字和下划线</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nickname" class="form-label">昵称</label>
+                                <input type="text" class="form-control" id="nickname" name="nickname" required>
+                                <div class="form-text">昵称将作为您在平台上的显示名称</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">密码</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="form-text">密码长度为6-20个字符，必须包含字母和数字</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">确认密码</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="gender" class="form-label">性别</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">请选择性别</option>
+                                    <option value="male">男</option>
+                                    <option value="female">女</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="agreement" name="agreement" value="1" required>
+                                <label class="form-check-label" for="agreement">
+                                    我已阅读并同意<a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">用户协议</a>和<a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">隐私政策</a>
+                                </label>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">注册</button>
+                            </div>
+                        </form>
+                        
+                        <div class="mt-3 text-center">
+                            <p>已有账号？<a href="/login">立即登录</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 用户协议模态框 -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">用户协议</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. 服务条款的接受</h6>
+                    <p>通过访问和使用绥E站，您表示同意接受本协议的所有条件和条款。如果您不同意本协议的任何条款，请不要使用本网站。</p>
+                    
+                    <h6>2. 服务描述</h6>
+                    <p>绥E站是一个为大学生提供校园生活服务的平台，包括但不限于校园论坛、二手市场、失物招领、校园跑腿、资源共享等服务。</p>
+                    
+                    <h6>3. 用户责任</h6>
+                    <p>用户在使用本网站时必须遵守所有适用的法律法规，不得发布违法、有害、威胁、滥用、骚扰、诽谤、粗俗、淫秽或其他令人反感的内容。</p>
+                    
+                    <h6>4. 隐私保护</h6>
+                    <p>我们重视您的隐私，您的个人信息将按照我们的隐私政策进行处理和保护。</p>
+                    
+                    <h6>5. 知识产权</h6>
+                    <p>本网站的所有内容，包括但不限于文字、图片、音频、视频、软件、程序、版面设计等均为我们或第三方所有，受法律保护。</p>
+                    
+                    <h6>6. 免责声明</h6>
+                    <p>本网站不对用户发布的内容承担责任，用户应对其发布的内容独立承担全部责任。</p>
+                    
+                    <h6>7. 协议修改</h6>
+                    <p>我们保留随时修改本协议的权利，修改后的协议将在网站上公布，继续使用本网站即表示您接受修改后的协议。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐私政策模态框 -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="privacyModalLabel">隐私政策</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. 信息收集</h6>
+                    <p>我们收集的信息包括但不限于用户名、昵称、性别等注册信息，以及您在使用我们服务时产生的相关信息。</p>
+                    
+                    <h6>2. 信息使用</h6>
+                    <p>我们使用收集的信息来提供、维护、保护和改进我们的服务，处理您的请求，以及与您沟通。</p>
+                    
+                    <h6>3. 信息共享</h6>
+                    <p>除非获得您的明确同意或法律要求，我们不会与第三方共享您的个人信息。</p>
+                    
+                    <h6>4. 信息安全</h6>
+                    <p>我们采取合理的安全措施来保护您的个人信息免受未经授权的访问、使用或披露。</p>
+                    
+                    <h6>5. Cookie使用</h6>
+                    <p>我们使用Cookie和类似技术来改善您的浏览体验，分析网站使用情况，以及提供个性化内容。</p>
+                    
+                    <h6>6. 数据保留</h6>
+                    <p>我们只在必要的时间内保留您的个人信息，以履行我们收集信息的目的，并遵守法律要求。</p>
+                    
+                    <h6>7. 您的权利</h6>
+                    <p>您有权访问、更新、删除您的个人信息，以及控制我们如何使用和共享您的信息。</p>
+                    
+                    <h6>8. 联系我们</h6>
+                    <p>如果您对本隐私政策有任何问题或疑虑，请通过我们的联系方式与我们联系。</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        // 页面初始化函数
+        function pageInit() {
+            // 绑定注册表单提交事件
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            
+            // 添加密码确认验证
+            document.getElementById('confirmPassword').addEventListener('input', validatePasswordConfirmation);
+        }
+
+        // 验证密码确认
+        function validatePasswordConfirmation() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            
+            if (password !== confirmPassword) {
+                confirmPasswordInput.setCustomValidity('两次输入的密码不一致');
+            } else {
+                confirmPasswordInput.setCustomValidity('');
+            }
+        }
+
+        // 处理注册
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            // 验证密码确认
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showMessage('两次输入的密码不一致', 'danger');
+                return;
+            }
+            
+            // 验证密码复杂度
+            if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/.test(password)) {
+                showMessage('密码必须为6-20个字符，且包含字母和数字', 'danger');
+                return;
+            }
+            
+            // 验证用户名
+            const username = document.getElementById('username').value;
+            if (!/^[a-zA-Z0-9_]{4,20}$/.test(username)) {
+                showMessage('用户名长度为4-20个字符，只能包含字母、数字和下划线', 'danger');
+                return;
+            }
+            
+            const formData = serializeForm(event.target);
+            
+            try {
+                // 显示加载状态
+                const submitBtn = event.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = '注册中...';
+                submitBtn.disabled = true;
+                
+                // 发送注册请求
+                const response = await post('/auth/register', formData);
+                
+                // 显示成功消息
+                showMessage('注册成功，请登录', 'success');
+                
+                // 显示页面加载动画
+                showPageLoader();
+                
+                // 跳转到登录页面
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('注册失败:', error);
+                showMessage(error.message || '注册失败，请稍后重试', 'danger');
+                
+                // 恢复按钮状态
+                const submitBtn = event.target.querySelector('button[type="submit"]');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
