@@ -65,7 +65,7 @@
                         <h5 class="card-title mb-0"><i class="bi bi-fire animate-pulse me-2"></i>热门帖子</h5>
                     </div>
                     <div class="card-body p-0">
-                        <div class="list-group list-group-flush" id="hotPostList">
+                        <div class="list-group list-group-flush" id="hotPostsList">
                             <!-- 热门帖子将通过JavaScript动态加载 -->
                             <div class="text-center py-3">
                                 <div class="loading-dots">
@@ -447,7 +447,7 @@
         }
 
         container.innerHTML = posts.map(post => `
-                <a href="/forum/post/${post.id}" class="list-group-item list-group-item-action">
+                <a href="#" class="list-group-item list-group-item-action" onclick="showPostDetail(${post.id})">
                     <div class="d-flex w-100 justify-content-between">
                         <h6 class="mb-1">${post.title}</h6>
                         <small>${formatNumber(post.viewCount)}</small>

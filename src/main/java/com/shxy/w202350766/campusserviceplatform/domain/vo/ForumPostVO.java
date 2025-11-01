@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -28,6 +29,6 @@ public class ForumPostVO {
     private Integer collectCount;
     private Boolean isTop;
     private Boolean isEssence;
-    private Date createTime;
-    private Date lastReplyTime;
+    private LocalDateTime createTime;
+    private LocalDateTime lastReplyTime;
 }

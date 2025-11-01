@@ -44,4 +44,10 @@ public class ProductCategory {
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 商品数量
+     */
+    @TableField(exist = false)
+    private Long productCount;
 }

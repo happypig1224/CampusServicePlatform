@@ -10,4 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ProductCollectService extends IService<ProductCollect> {
 
+    void deleteById(Long id, Long userId);
 }

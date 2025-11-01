@@ -6,7 +6,6 @@ package com.shxy.w202350766.campusserviceplatform.constant;
  * @CreateTime 2025.10.30
  */
 public class ResponseStatusConstant {
-    public static final int SUCCESS = 200;
     public static final int FAIL = 400;
     public static final int CONFLICT = 409;
 }

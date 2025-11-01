@@ -39,6 +39,12 @@ public class OssServiceImpl implements OssService {
     @Override
     // 上传头像到COS
     public String uploadAvatar(MultipartFile file) {
+        return uploadImage(file, avatarDir);
+    }
+
+    @Override
+    // 上传图片到COS
+    public String uploadImage(MultipartFile file, String dir) {
         COSClient cosClient = getCosClient(file);
 
         try {
@@ -51,7 +57,7 @@ public class OssServiceImpl implements OssService {
             }
 
             // 生成唯一文件名
-            String fileName = avatarDir + UUID.randomUUID().toString().replaceAll("-", "") + extension;
+            String fileName = dir + UUID.randomUUID().toString().replaceAll("-", "") + extension;
 
             // 获取文件输入流
             InputStream inputStream = file.getInputStream();

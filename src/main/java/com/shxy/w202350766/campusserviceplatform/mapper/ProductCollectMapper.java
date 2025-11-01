@@ -2,6 +2,7 @@ package com.shxy.w202350766.campusserviceplatform.mapper;
 
 import com.shxy.w202350766.campusserviceplatform.domain.ProductCollect;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
 
 /**
 * @author 33046
@@ -11,6 +12,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ProductCollectMapper extends BaseMapper<ProductCollect> {
 
+    /**
+     * 根据收藏ID和用户ID删除收藏
+     * @param id 收藏ID
+     * @param userId 用户ID
+     */
+    @Delete("delete from product_collect where id = #{id} and user_id = #{userId}")
+    void deleteById(Long id, Long userId);
 }
 
 

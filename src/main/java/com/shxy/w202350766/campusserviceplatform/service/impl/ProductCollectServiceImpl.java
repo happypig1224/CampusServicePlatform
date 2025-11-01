@@ -15,6 +15,14 @@ import org.springframework.stereotype.Service;
 public class ProductCollectServiceImpl extends ServiceImpl<ProductCollectMapper, ProductCollect>
     implements ProductCollectService{
 
+    /**
+     * 根据收藏ID和用户ID删除收藏
+     * @param id
+     * @param userId
+     */
+    public void deleteById(Long id, Long userId) {
+        baseMapper.deleteById(id,userId);
+    }
 }
 
 
