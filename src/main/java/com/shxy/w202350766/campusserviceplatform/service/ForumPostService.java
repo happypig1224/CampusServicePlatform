@@ -1,13 +1,13 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ForumPost;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumPost;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumPostDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumReplyDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumCategoryVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumPostVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumReplyVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumStatsVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumPostDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumReplyDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumCategoryVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumPostVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumReplyVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumStatsVO;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
 
 import java.util.List;

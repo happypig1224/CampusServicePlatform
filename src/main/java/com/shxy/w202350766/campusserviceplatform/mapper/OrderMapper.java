@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.mapper;
 
-import com.shxy.w202350766.campusserviceplatform.domain.Order;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ForumSection;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumSection;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

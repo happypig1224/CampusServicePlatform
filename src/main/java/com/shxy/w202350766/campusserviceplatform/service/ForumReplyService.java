@@ -1,8 +1,8 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ForumReply;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumReply;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumReplyDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumReplyDTO;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
 
 /**

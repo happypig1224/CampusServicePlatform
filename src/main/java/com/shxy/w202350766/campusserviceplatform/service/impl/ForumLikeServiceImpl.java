@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ForumLike;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumLike;
 import com.shxy.w202350766.campusserviceplatform.service.ForumLikeService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ForumLikeMapper;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.shxy.w202350766.campusserviceplatform.domain.Product;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductDetailVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductListVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Product;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductDetailVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductListVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductVO;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
 
 import java.util.List;

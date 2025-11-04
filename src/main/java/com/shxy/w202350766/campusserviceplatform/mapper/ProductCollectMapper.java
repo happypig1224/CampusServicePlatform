@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.mapper;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCollect;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCollect;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
 

@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ErrandTask;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ErrandTask;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

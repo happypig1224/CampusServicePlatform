@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.mapper;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ErrandTask;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ErrandTask;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

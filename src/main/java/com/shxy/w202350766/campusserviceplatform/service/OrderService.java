@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.Order;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Order;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

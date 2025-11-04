@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ChatSessionMember;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ChatSessionMember;
 import com.shxy.w202350766.campusserviceplatform.service.ChatSessionMemberService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ChatSessionMemberMapper;
 import org.springframework.stereotype.Service;

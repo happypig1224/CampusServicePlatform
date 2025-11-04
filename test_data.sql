@@ -118,7 +118,13 @@ INSERT INTO `lost_and_found` (`user_id`, `type`, `title`, `description`, `item_t
 (3, 'FOUND', '捡到一副眼镜', '在食堂捡到一副黑色边框眼镜，放在失物招领处', '眼镜', '2023-12-02 12:30:00', '食堂一楼', '["glasses1.jpg"]', 'NORMAL', '13800000002', 'PENDING'),
 (4, 'LOST', '丢失U盘', '在计算机房丢失一个32G金士顿U盘，内有重要学习资料', 'U盘', '2023-12-01 10:00:00', '计算机学院机房', '["usb1.jpg"]', 'URGENT', '13800000003', 'RESOLVED'),
 (2, 'FOUND', '捡到学生证', '在操场捡到一张学生证，姓名：李四，学号：2023001', '证件', '2023-12-03 16:00:00', '操场看台', '["card1.jpg"]', 'NORMAL', '13800000001', 'PENDING');
-
+-- 丢失物品分类测试数据
+    INSERT INTO `lost_item_category`(name)
+    values ('电子设备'),
+           ('书籍'),
+           ('运动器材'),
+           ('服装鞋帽'),
+           ('其他物品');
 -- 11. 插入感谢信测试数据
 INSERT INTO `thank_you_note` (`lost_found_id`, `user_id`, `title`, `content`, `images`) VALUES 
 (3, 4, '感谢好心人找回U盘', '非常感谢捡到我U盘的同学，里面的资料对我非常重要！', '["thank1.jpg"]');

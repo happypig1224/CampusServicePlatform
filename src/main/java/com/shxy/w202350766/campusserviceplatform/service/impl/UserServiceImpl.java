@@ -1,14 +1,14 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.User;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.UserDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.User;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.UserDTO;
 import com.shxy.w202350766.campusserviceplatform.service.OssService;
 import com.shxy.w202350766.campusserviceplatform.service.UserService;
 import com.shxy.w202350766.campusserviceplatform.mapper.UserMapper;
 import com.shxy.w202350766.campusserviceplatform.utils.JwtUtils;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.UserVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.UserVO;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

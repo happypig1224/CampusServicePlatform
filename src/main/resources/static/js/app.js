@@ -180,48 +180,51 @@ async function checkLoginStatus() {
     if (sessionUser) {
         // session中有用户信息，直接更新UI
         updateUserMenu(sessionUser);
-        return;
+        return true;
     }
     
     if (token) {
         // 如果有token，获取用户信息
-        fetchUserInfo()
-            .then(user => {
-                if (user) {
-                    updateUserMenu(user);
-                }
-            })
-            .catch(error => {
-                console.error('获取用户信息失败:', error);
-                // 如果获取用户信息失败，清除token并显示登录/注册按钮
+        try {
+            const user = await fetchUserInfo();
+            if (user) {
+                updateUserMenu(user);
+                return true;
+            } else {
+                // fetchUserInfo返回null，表示获取用户信息失败
+                console.log('获取用户信息返回null，清除token');
                 localStorage.removeItem('token');
-                if (userMenu) {
-                    userMenu.innerHTML = `
-                        <a href="/login" class="btn btn-login me-2">登录</a>
-                        <a href="/register" class="btn btn-register">注册</a>
-                    `;
-                }
-                
-                // 如果当前在需要登录的页面，跳转到登录页
-                const currentPath = window.location.pathname;
-                if (currentPath.startsWith('/user/')) {
-                    window.location.href = '/login';
-                }
-            });
+                updateLoginMenu();
+                return false;
+            }
+        } catch (error) {
+            console.error('获取用户信息失败:', error);
+            // 如果获取用户信息失败，清除token并显示登录/注册按钮
+            localStorage.removeItem('token');
+            updateLoginMenu();
+            return false;
+        }
     } else {
         // 如果没有token，显示登录/注册按钮
-        if (userMenu) {
-            userMenu.innerHTML = `
-                <a href="/login" class="btn btn-login me-2">登录</a>
-                <a href="/register" class="btn btn-register">注册</a>
-            `;
-        }
-        
-        // 如果当前在需要登录的页面，跳转到登录页
-        const currentPath = window.location.pathname;
-        if (currentPath.startsWith('/user/')) {
-            window.location.href = '/login';
-        }
+        updateLoginMenu();
+        return false;
+    }
+}
+
+// 更新登录菜单
+function updateLoginMenu() {
+    const userMenu = document.querySelector('.user-menu');
+    if (userMenu) {
+        userMenu.innerHTML = `
+            <a href="/login" class="btn btn-login me-2">登录</a>
+            <a href="/register" class="btn btn-register">注册</a>
+        `;
+    }
+    
+    // 如果当前在需要登录的页面，跳转到登录页
+    const currentPath = window.location.pathname;
+    if (currentPath.startsWith('/user/')) {
+        window.location.href = '/login';
     }
 }
 
@@ -244,10 +247,8 @@ async function fetchUserInfo() {
         console.error('获取用户信息失败:', error);
         // 清除本地存储的token
         localStorage.removeItem('token');
-        // 重新检查登录状态
-        checkLoginStatus();
-        // 返回null而不是抛出错误，让调用方更容易处理
-        return null;
+        // 抛出错误而不是返回null，让调用方能够正确处理
+        throw error;
     }
 }
 
@@ -408,8 +409,10 @@ async function apiRequest(url, options = {}) {
         if (!response.ok) {
             // 如果是401错误，清除token并重新检查登录状态
             if (response.status === 401) {
+                console.log('收到401错误，清除token并重新检查登录状态');
                 localStorage.removeItem('token');
-                checkLoginStatus();
+                // 不在这里调用checkLoginStatus，避免无限递归
+                updateLoginMenu();
             }
             
             const error = await response.json();
@@ -435,9 +438,10 @@ function get(url, params = {}) {
 
 // POST请求
 function post(url, data = {}) {
+    console.log('POST请求数据:', data);
     return apiRequest(url, {
         method: 'POST',
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     });
 }
 

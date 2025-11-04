@@ -1,10 +1,10 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.User;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.UserDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.UserDTO;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.UserVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.UserVO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

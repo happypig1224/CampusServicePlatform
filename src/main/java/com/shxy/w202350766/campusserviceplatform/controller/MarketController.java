@@ -1,24 +1,17 @@
 package com.shxy.w202350766.campusserviceplatform.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.shxy.w202350766.campusserviceplatform.domain.Product;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCategory;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductDetailVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductListVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductPageResult;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Product;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCategory;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductDetailVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductListVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductVO;
 import com.shxy.w202350766.campusserviceplatform.service.ProductCategoryService;
 import com.shxy.w202350766.campusserviceplatform.service.ProductService;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
 import jakarta.annotation.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author 吴汇明
@@ -117,7 +110,12 @@ public class MarketController {
         return productService.deleteCollectProduct(id,token);
     }
 
-    ///products商品发布
+    /**
+     * 商品发布
+     * @param product
+     * @param token
+     * @return
+     */
     @PostMapping("/products")
     public Result<ProductDetailVO> publishProduct(@RequestBody Product product,
                                        @RequestHeader("Authorization") String token) {

@@ -21,7 +21,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/**")
+                .addPathPatterns("/**","/api/lost-found/items","/api/market/products/{id}/collect",
+                        "/api/market/products",
+                        "/api/lost-found/publishItems")
                 .excludePathPatterns("/api/auth/login", "/api/auth/register", "/api/auth/logout")
                 .excludePathPatterns("/static/**", "/css/**", "/js/**", "/images/**")
                 .excludePathPatterns("/error", "/favicon.ico")
@@ -29,7 +31,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/", "/index", "/login", "/register")
                 .excludePathPatterns("/api/forum/sections","/api/forum/posts","/api/forum/posts/{postId}","/api/forum/posts/hot" ,
                         "/api/forum/replies/latest","/api/forum/stats",
-                        "/api/forum/post/{postId}");
+                        "/api/forum/post/{postId}")
+                .excludePathPatterns("/api/lost-found/**");
     }
 
     @Override

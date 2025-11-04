@@ -2,8 +2,8 @@ package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.Product;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCategory;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Product;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCategory;
 import com.shxy.w202350766.campusserviceplatform.service.ProductCategoryService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductCategoryMapper;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductMapper;

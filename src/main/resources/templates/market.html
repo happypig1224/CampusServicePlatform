@@ -15,7 +15,7 @@
         <div class="container">
             <nav class="navbar">
                 <a href="/" class="logo">绥E站</a>
-
+                
                 <ul class="nav-links">
                     <li><a href="/">首页</a></li>
                     <li><a href="/forum">校园论坛</a></li>
@@ -24,7 +24,7 @@
                     <li><a href="/errand">校园跑腿</a></li>
                     <li><a href="/resource">资源共享</a></li>
                 </ul>
-
+                
                 <div class="user-menu">
                     <a href="/login" class="btn btn-primary">登录</a>
                     <a href="/register" class="btn btn-outline">注册</a>
@@ -85,7 +85,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <!-- 热门商品 -->
                     <div class="card mt-3">
                         <div class="card-header">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- 中间商品列表 -->
                 <div class="col-md-9">
                     <div class="card">
@@ -119,7 +119,7 @@
                                     <label class="btn btn-outline-secondary" for="gridView">
                                         <i class="bi bi-grid-3x3-gap"></i>
                                     </label>
-
+                                    
                                     <input type="radio" class="btn-check" name="viewMode" id="listView" autocomplete="off">
                                     <label class="btn btn-outline-secondary" for="listView">
                                         <i class="bi bi-list"></i>
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-
+                            
                             <!-- 分页 -->
                             <div class="d-flex justify-content-center mt-4">
                                 <nav aria-label="商品分页">
@@ -303,22 +303,22 @@
         let onlyOnSale = false;
         let viewMode = 'grid'; // grid 或 list
         let uploadedImages = [];
-
+        
         // 页面初始化函数
         function pageInit() {
             // 加载分类列表
             loadCategories();
-
+            
             // 加载热门商品
             loadHotProducts();
-
+            
             // 加载商品列表
             loadProducts();
-
+            
             // 绑定事件
             bindEvents();
         }
-
+        
         // 绑定事件
         function bindEvents() {
             // 搜索
@@ -327,7 +327,7 @@
                 currentPage = 1;
                 loadProducts();
             });
-
+            
             document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     currentKeyword = this.value.trim();
@@ -335,28 +335,28 @@
                     loadProducts();
                 }
             });
-
+            
             // 分类筛选
             document.getElementById('categorySelect').addEventListener('change', function() {
                 currentCategory = this.value ? parseInt(this.value) : null;
                 currentPage = 1;
                 loadProducts();
             });
-
+            
             // 排序
             document.getElementById('sortSelect').addEventListener('change', function() {
                 currentSort = this.value;
                 currentPage = 1;
                 loadProducts();
             });
-
+            
             // 仅显示在售商品
             document.getElementById('onlyOnSale').addEventListener('change', function() {
                 onlyOnSale = this.checked;
                 currentPage = 1;
                 loadProducts();
             });
-
+            
             // 视图模式切换
             document.querySelectorAll('input[name="viewMode"]').forEach(radio => {
                 radio.addEventListener('change', function() {
@@ -365,7 +365,7 @@
                     renderProducts(window.currentProducts || []);
                 });
             });
-
+            
             // 发布商品按钮
             document.getElementById('publishBtn').addEventListener('click', function() {
                 // 检查用户是否登录
@@ -376,27 +376,27 @@
                     }, 1000);
                     return;
                 }
-
+                
                 // 打开发布商品模态框
             const modal = new bootstrap.Modal(document.getElementById('publishProductModal'));
-
+            
             // 清空图片预览和已上传图片列表
             document.getElementById('imagePreview').innerHTML = '';
             uploadedImages = [];
-
+            
             modal.show();
-
+            
             // 加载分类选项
             loadCategoryOptions();
             });
-
+            
             // 商品图片上传
             document.getElementById('productImages').addEventListener('change', handleImageUpload);
-
+            
             // 提交商品
             document.getElementById('submitProductBtn').addEventListener('click', submitProduct);
         }
-
+        
         // 加载分类列表
         async function loadCategories() {
             try {
@@ -408,84 +408,84 @@
                 document.getElementById('categoryList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
             }
         }
-
+        
         // 渲染分类列表
         function renderCategories(categories) {
             const container = document.getElementById('categoryList');
-
+            
             // 添加"全部商品"选项
             let html = `
                 <a href="#" class="list-group-item list-group-item-action ${!currentCategory ? 'active' : ''}" data-category-id="">
                     <i class="bi bi-grid-3x3-gap me-2"></i>全部商品
                 </a>
             `;
-
+            
             // 添加分类
             categories.forEach(category => {
                 html += `
-                    <a href="#" class="list-group-item list-group-item-action ${currentCategory === category.id ? 'active' : ''}"
+                    <a href="#" class="list-group-item list-group-item-action ${currentCategory === category.id ? 'active' : ''}" 
                        data-category-id="${category.id}">
                         <i class="bi ${category.icon || 'bi-tag'} me-2"></i>${category.name}
                         <span class="badge bg-secondary rounded-pill float-end">${category.productCount || 0}</span>
                     </a>
                 `;
             });
-
+            
             container.innerHTML = html;
-
+            
             // 绑定点击事件
             container.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-
+                    
                     // 更新活动状态
                     container.querySelectorAll('a').forEach(item => item.classList.remove('active'));
                     this.classList.add('active');
-
+                    
                     // 更新当前分类
                     currentCategory = this.dataset.categoryId ? parseInt(this.dataset.categoryId) : null;
                     currentPage = 1;
-
+                    
                     // 更新标题
                     const categoryName = this.textContent.trim().split('\n')[0];
                     document.getElementById('categoryTitle').textContent = categoryName;
                     document.getElementById('categorySelect').value = currentCategory || '';
-
+                    
                     // 重新加载商品
                     loadProducts();
                 });
             });
         }
-
+        
         // 渲染分类选项
         function renderCategoryOptions(categories) {
             const select = document.getElementById('categorySelect');
-
+            
             let html = '<option value="">全部分类</option>';
             categories.forEach(category => {
                 html += `<option value="${category.id}">${category.name}</option>`;
             });
-
+            
             select.innerHTML = html;
         }
-
+        
         // 加载分类选项（用于发布商品）
         async function loadCategoryOptions() {
             try {
                 const categories = await get('/market/categories');
                 const select = document.getElementById('productCategory');
-
+                
                 let html = '<option value="">请选择分类</option>';
                 categories.data.forEach(category => {
                     html += `<option value="${category.id}">${category.name}</option>`;
                 });
-
+                
                 select.innerHTML = html;
             } catch (error) {
                 console.error('加载分类选项失败:', error);
             }
         }
-
+        
         // 加载热门商品
         async function loadHotProducts() {
             try {
@@ -496,16 +496,16 @@
                 document.getElementById('hotProductsList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
             }
         }
-
+        
         // 渲染热门商品
         function renderHotProducts(products) {
             const container = document.getElementById('hotProductsList');
-
+            
             if (!products || products.length === 0) {
                 container.innerHTML = '<div class="p-3 text-muted">暂无热门商品</div>';
                 return;
             }
-
+            
             container.innerHTML = products.map(product => `
                 <a href="#" class="list-group-item list-group-item-action product-item" data-product-id="${product.id}">
                     <div class="d-flex w-100 justify-content-between">
@@ -516,7 +516,7 @@
                     <small>${product.categoryName} · ${formatDate(product.createTime)}</small>
                 </a>
             `).join('');
-
+            
             // 绑定点击事件
             container.querySelectorAll('.product-item').forEach(item => {
                 item.addEventListener('click', function(e) {
@@ -526,7 +526,7 @@
                 });
             });
         }
-
+        
         // 加载商品列表
         async function loadProducts() {
             try {
@@ -538,53 +538,53 @@
                         </div>
                     </div>
                 `;
-
+                
                 // 构建请求参数
                 const params = {
                     page: currentPage,
                     limit: 12,
                     sort: currentSort
                 };
-
+                
                 if (currentCategory) {
                     params.categoryId = currentCategory;
                 }
-
+                
                 if (currentKeyword) {
                     params.keyword = currentKeyword;
                 }
-
+                
                 if (onlyOnSale) {
                     params.status = 'ON_SALE';
                 }
-
+                
                 // 发送请求
                 const response = await get('/market/products', params);
-
+                
                 // 保存当前商品数据
                 window.currentProducts = response.data;
-
+                
                 // 渲染商品列表
                 renderProducts(response.data);
-
+                
                 // 渲染分页
                 renderPagination(response.data.length);
-
+                
             } catch (error) {
                 console.error('加载商品列表失败:', error);
                 document.getElementById('productList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
             }
         }
-
+        
         // 渲染商品列表
         function renderProducts(products) {
             const container = document.getElementById('productList');
-
+            
             if (!products || products.length === 0) {
                 container.innerHTML = '<div class="col-12 text-center py-5 text-muted">暂无商品</div>';
                 return;
             }
-
+            
             // 根据视图模式渲染
             if (viewMode === 'grid') {
                 container.className = 'row g-4';
@@ -592,7 +592,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card h-100 product-item" data-product-id="${product.id}">
                             <div class="product-image-container position-relative">
-                                ${product.images && product.images.length > 0 ?
+                                ${product.images && product.images.length > 0 ? 
                                     `<img src="${product.images[0]}" class="card-img-top product-image" alt="${product.title}">` :
                                     `<img src="https://picsum.photos/seed/default-product/400/300.jpg" class="card-img-top product-image" alt="${product.title}">`
                                 }
@@ -622,7 +622,7 @@
                     <div class="card mb-3 product-item" data-product-id="${product.id}">
                         <div class="row g-0">
                             <div class="col-md-3">
-                                ${product.images && product.images.length > 0 ?
+                                ${product.images && product.images.length > 0 ? 
                                     `<img src="${product.images[0]}" class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.title}">` :
                                     `<img src="https://picsum.photos/seed/default-product/400/300.jpg" class="img-fluid rounded-start h-100 object-fit-cover" alt="${product.title}">`
                                 }
@@ -657,18 +657,18 @@
                     </div>
                 `).join('');
             }
-
+            
             // 绑定商品点击事件
             container.querySelectorAll('.product-item').forEach(item => {
                 item.addEventListener('click', function(e) {
                     // 如果点击的是按钮，不触发商品详情
                     if (e.target.classList.contains('btn')) return;
-
+                    
                     const productId = this.dataset.productId;
                     showProductDetail(productId);
                 });
             });
-
+            
             // 绑定收藏按钮事件
             container.querySelectorAll('.collect-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -677,7 +677,7 @@
                     toggleCollect(productId, this);
                 });
             });
-
+            
             // 绑定下单按钮事件
             container.querySelectorAll('.order-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
@@ -687,11 +687,11 @@
                 });
             });
         }
-
+        
         // 渲染简化分页（只有上一页和下一页）通过判断集合长度
         function renderPagination(pagination) {
             const container = document.getElementById('pagination');
-
+            
             // 如果没有分页数据或者只有一页，则不显示分页
             if (!pagination || pagination <= 10) {
                 container.innerHTML = '';
@@ -706,19 +706,19 @@
                     <a class="page-link" href="#" data-page="${currentPage - 1}">上一页</a>
                 </li>`;
             }
-
+            
             // 当前页信息
             html += `<li class="page-item disabled"><span class="page-link">第 ${currentPage} 页</span></li>`;
-
+            
             // 下一页按钮（当前页小于总页数时显示）
             if (pagination>10) {
                 html += `<li class="page-item">
                     <a class="page-link" href="#" data-page="${currentPage + 1}">下一页</a>
                 </li>`;
             }
-
+            
             container.innerHTML = html;
-
+            
             // 绑定点击事件
             container.querySelectorAll('a').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -732,58 +732,113 @@
             });
         }
 
+        // 上传单个图片到服务器
+        async function uploadImageToServer(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('/api/upload/image', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': localStorage.getItem('token') ?
+                            (localStorage.getItem('token').startsWith('Bearer ') ?
+                                localStorage.getItem('token') :
+                                `Bearer ${localStorage.getItem('token')}`) :
+                            ''
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || '图片上传失败');
+                }
+
+                const result = await response.json();
+                return result.data.url;
+            } catch (error) {
+                console.error('图片上传错误:', error);
+                throw error;
+            }
+        }
+
         // 处理图片上传
-        function handleImageUpload(event) {
+        async function handleImageUpload(event) {
             const files = event.target.files;
             const preview = document.getElementById('imagePreview');
 
             // 处理每个文件
-            Array.from(files).forEach(file => {
+            for (const file of Array.from(files)) {
                 // 检查文件类型
                 if (!file.type.startsWith('image/')) {
                     showMessage('只能上传图片文件', 'warning');
-                    return;
+                    continue;
                 }
 
                 // 检查文件大小（限制为5MB）
                 if (file.size > 5 * 1024 * 1024) {
                     showMessage('图片大小不能超过5MB', 'warning');
-                    return;
+                    continue;
                 }
 
                 // 创建预览
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     const div = document.createElement('div');
                     div.className = 'position-relative';
+
+                    // 添加加载指示器
+                    const loadingSpinner = document.createElement('div');
+                    loadingSpinner.className = 'position-absolute top-50 start-50 translate-middle';
+                    loadingSpinner.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">上传中...</span></div>';
+
                     div.innerHTML = `
-                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover; opacity: 0.7;">
                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" data-index="${uploadedImages.length}">
                             <i class="bi bi-x"></i>
                         </button>
                     `;
+                    div.appendChild(loadingSpinner);
                     preview.appendChild(div);
 
-                    // 添加到已上传图片列表
-                    uploadedImages.push({
-                        file: file,
-                        url: e.target.result
-                    });
+                    try {
+                        // 上传图片到服务器
+                        const imageUrl = await uploadImageToServer(file);
 
-                    // 绑定删除按钮事件
-                    div.querySelector('button').addEventListener('click', function() {
-                        const index = parseInt(this.dataset.index);
-                        uploadedImages.splice(index, 1);
-                        div.remove();
+                        // 更新预览图片
+                        const img = div.querySelector('img');
+                        img.src = imageUrl;
+                        img.style.opacity = '1';
 
-                        // 更新剩余按钮的索引
-                        preview.querySelectorAll('button').forEach((btn, i) => {
-                            btn.dataset.index = i;
+                        // 移除加载指示器
+                        loadingSpinner.remove();
+
+                        // 添加到已上传图片列表
+                        uploadedImages.push({
+                            file: file,
+                            url: imageUrl
                         });
-                    });
+
+                        // 绑定删除按钮事件
+                        div.querySelector('button').addEventListener('click', function() {
+                            const index = parseInt(this.dataset.index);
+                            uploadedImages.splice(index, 1);
+                            div.remove();
+
+                            // 更新剩余按钮的索引
+                            preview.querySelectorAll('button').forEach((btn, i) => {
+                                btn.dataset.index = i;
+                            });
+                        });
+                    } catch (error) {
+                        // 上传失败，移除预览
+                        div.remove();
+                        showMessage(`图片上传失败: ${error.message}`, 'danger');
+                    }
                 };
                 reader.readAsDataURL(file);
-            });
+            }
 
             // 清空文件输入，允许重复选择同一文件
             event.target.value = '';
@@ -791,11 +846,11 @@
 
         // 提交商品
         async function submitProduct() {
-            // 获取表单字段 - 使用正确的ID
+            // 通过DOM操作直接获取每个表单元素的值
             const categoryId = document.getElementById('productCategory').value;
+            const price = document.getElementById('productPrice').value;
             const title = document.getElementById('productTitle').value;
             const description = document.getElementById('productDescription').value;
-            const price = document.getElementById('productPrice').value;
             const originalPrice = document.getElementById('productOriginalPrice').value;
             const location = document.getElementById('productLocation').value;
             const contactPhone = document.getElementById('productContactPhone').value;
@@ -806,106 +861,64 @@
                 showMessage('请选择商品分类', 'warning');
                 return;
             }
-
+            
             if (!title.trim()) {
                 showMessage('请输入商品标题', 'warning');
                 return;
             }
-
+            
             if (!description.trim()) {
                 showMessage('请输入商品描述', 'warning');
                 return;
             }
-
+            
             if (!price || price <= 0) {
                 showMessage('请输入有效的商品价格', 'warning');
                 return;
             }
-
+            
             try {
                 // 显示加载状态
                 const submitBtn = document.getElementById('submitProductBtn');
                 const originalText = submitBtn.textContent;
                 submitBtn.textContent = '发布中...';
                 submitBtn.disabled = true;
-
-                // 创建商品对象，发送JSON格式数据
-                const productData = {
-                    categoryId: parseInt(categoryId),
-                    title: title,
-                    description: description,
-                    price: parseFloat(price)
-                };
                 
-                // 添加可选字段
-                if (originalPrice) {
-                    productData.originalPrice = parseFloat(originalPrice);
-                }
+               let data={
+                   categoryId:parseInt(categoryId),
+                   price:parseFloat(price),
+                   title:title.trim(),
+                   description:description.trim(),
+                   originalPrice:parseFloat(originalPrice),
+                   location:location,
+                   contactPhone:contactPhone,
+                   contactWechat:contactWechat,
+                   images:[]
+               }
                 
-                if (location) {
-                    productData.location = location;
-                }
+                // 添加图片文件
+                uploadedImages.forEach(image => {
+                    data.images.push(image.url);
+                });
+                console.log(data);
+                // 发送请求
+                await post('/market/products', data);
                 
-                if (contactPhone) {
-                    productData.contactPhone = contactPhone;
-                }
-                
-                if (contactWechat) {
-                    productData.contactWechat = contactWechat;
-                }
-
-                // 先上传图片，获取图片URL
-                let imageUrls = [];
-                if (uploadedImages.length > 0) {
-                    for (const imageObj of uploadedImages) {
-                        const imageFormData = new FormData();
-                        imageFormData.append('file', imageObj.file);
-                        
-                        try {
-                            const uploadResponse = await fetch('/api/upload/image', {
-                                method: 'POST',
-                                body: imageFormData,
-                                headers: {
-                                    'Authorization': localStorage.getItem('token')
-                                }
-                            });
-                            
-                            if (uploadResponse.ok) {
-                                const uploadResult = await uploadResponse.json();
-                                if (uploadResult.code === 200 && uploadResult.data && uploadResult.data.url) {
-                                    imageUrls.push(uploadResult.data.url);
-                                }
-                            }
-                        } catch (error) {
-                            console.error('上传图片失败:', error);
-                        }
-                    }
-                    
-                    // 将图片URL添加到商品数据中
-                    if (imageUrls.length > 0) {
-                        productData.images = imageUrls;
-                    }
-                }
-
-                // 发送商品数据
-                await post('/market/products', productData);
-
                 // 关闭模态框
                 const modal = bootstrap.Modal.getInstance(document.getElementById('publishProductModal'));
                 modal.hide();
-
-                // 重置表单字段
-                const form = document.getElementById('publishProductForm');
-                form.reset();
+                
+                // 重置表单
+                document.getElementById('publishProductForm').reset();
                 document.getElementById('imagePreview').innerHTML = '';
                 uploadedImages = [];
-
+                
                 // 显示成功消息
                 showMessage('商品发布成功，等待审核', 'success');
-
+                
                 // 重新加载商品列表
                 loadProducts();
-
+                
             } catch (error) {
                 console.error('发布商品失败:', error);
                 showMessage(error.message || '发布商品失败，请稍后重试', 'danger');
@@ -916,14 +929,14 @@
                 submitBtn.disabled = false;
             }
         }
-
+        
         // 显示商品详情
         async function showProductDetail(productId) {
             try {
                 // 获取商品详情
                 const response = await get(`/market/products/${productId}`);
                 const product = response.data;
-
+                
                 // 填充商品详情
                 document.getElementById('detailTitle').textContent = product.title;
                 document.getElementById('detailPrice').textContent = `¥${product.price}`;
@@ -935,19 +948,19 @@
                 document.getElementById('detailContact').textContent = getContactText(product);
                 document.getElementById('detailCreateTime').textContent = formatDate(product.createTime);
                 document.getElementById('detailViewCount').textContent = formatNumber(product.viewCount);
-
+                
                 // 设置状态样式
                 const statusBadge = document.getElementById('detailStatus');
                 statusBadge.className = `badge bg-${getStatusColor(product.status)}`;
-
+                
                 // 渲染商品图片
                 renderProductImages(product.images);
-
+                
                 // 设置收藏按钮状态
                 const collectBtn = document.getElementById('collectBtn');
                 collectBtn.textContent = product.isCollected ? '已收藏' : '收藏';
                 collectBtn.className = product.isCollected ? 'btn btn-secondary' : 'btn btn-primary';
-
+                
                 // 设置下单按钮状态
                 const orderBtn = document.getElementById('orderBtn');
                 if (product.status === 'ON_SALE' && product.userId !== getCurrentUserId()) {
@@ -963,15 +976,15 @@
                         orderBtn.textContent = '自己的商品';
                     }
                 }
-
+                
                 // 绑定收藏按钮事件
                 collectBtn.onclick = function() {
                     toggleCollect(productId, this);
                 };
-
+                
                 // 显示模态框
                 const modal = new bootstrap.Modal(document.getElementById('productDetailModal'));
-
+                
                 // 添加模态框关闭事件监听器，确保下次打开时按钮状态正确
                 document.getElementById('productDetailModal').addEventListener('hidden.bs.modal', function () {
                     // 重置收藏按钮状态，确保下次打开时能正确绑定事件
@@ -979,19 +992,19 @@
                     btn.onclick = null;
                     btn.disabled = false;
                 });
-
+                
                 modal.show();
-
+                
             } catch (error) {
                 console.error('获取商品详情失败:', error);
                 showMessage('获取商品详情失败', 'danger');
             }
         }
-
+        
         // 渲染商品图片
         function renderProductImages(images) {
             const container = document.getElementById('productCarouselInner');
-
+            
             if (!images || images.length === 0) {
                 container.innerHTML = `
                     <div class="carousel-item active">
@@ -1000,14 +1013,14 @@
                 `;
                 return;
             }
-
+            
             container.innerHTML = images.map((image, index) => `
                 <div class="carousel-item ${index === 0 ? 'active' : ''}">
                     <img src="${image}" class="d-block w-100" alt="商品图片${index + 1}">
                 </div>
             `).join('');
         }
-
+        
         // 获取状态文本
         function getStatusText(status) {
             const statusMap = {
@@ -1018,7 +1031,7 @@
             };
             return statusMap[status] || status;
         }
-
+        
         // 获取状态颜色
         function getStatusColor(status) {
             const colorMap = {
@@ -1029,7 +1042,7 @@
             };
             return colorMap[status] || 'secondary';
         }
-
+        
         // 获取联系方式文本
         function getContactText(product) {
             let contact = '';
@@ -1042,13 +1055,13 @@
             }
             return contact || '未提供';
         }
-
+        
         // 获取当前用户ID（从本地存储或全局变量中获取）
         function getCurrentUserId() {
             // 这里应该从用户信息中获取，暂时返回null
             return null;
         }
-
+        
         // 切换收藏状态
         async function toggleCollect(productId, button) {
             try {
@@ -1060,22 +1073,22 @@
                     }, 1000);
                     return;
                 }
-
+                
                 // 保存原始按钮状态
                 const originalText = button.textContent;
                 const originalClass = button.className;
                 const isCollected = originalText === '已收藏';
-
+                
                 // 显示加载状态
                 button.textContent = '处理中...';
                 button.disabled = true;
-
+                
                 // 发送请求
                 const url = `/market/products/${productId}/collect`;
                 const method = isCollected ? 'DELETE' : 'POST';
-
+                
                 await apiRequest(url, { method });
-
+                
                 // 更新按钮状态
                 if (isCollected) {
                     // 原来是已收藏，现在取消收藏
@@ -1088,21 +1101,21 @@
                     button.className = 'btn btn-secondary';
                     showMessage('收藏成功', 'success');
                 }
-
+                
                 // 确保按钮可点击
                 button.disabled = false;
-
+                
             } catch (error) {
                 console.error('收藏操作失败:', error);
                 showMessage(error.message || '收藏操作失败', 'danger');
-
+                
                 // 恢复按钮状态
                 button.textContent = originalText;
                 button.className = originalClass;
                 button.disabled = false;
             }
         }
-
+        
         // 创建订单
         async function createOrder(productId) {
             try {
@@ -1114,18 +1127,18 @@
                     }, 1000);
                     return;
                 }
-
+                
                 // 获取商品信息
                 const product = await get(`/market/products/${productId}`);
-
+                
                 // 确认下单
                 if (!confirm(`确认下单「${product.title}」？价格：¥${product.price}`)) {
                     return;
                 }
-
+                
                 // 跳转到订单页面
                 window.location.href = `/market/order?productId=${productId}`;
-
+                
             } catch (error) {
                 console.error('创建订单失败:', error);
                 showMessage(error.message || '创建订单失败', 'danger');

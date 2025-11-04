@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shxy.w202350766.campusserviceplatform.domain.Product;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCategory;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCollect;
-import com.shxy.w202350766.campusserviceplatform.domain.User;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductDetailVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductListVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ProductVO;
+import com.shxy.w202350766.campusserviceplatform.constant.ProductStatusEnum;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Product;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCategory;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCollect;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductDetailVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductListVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ProductVO;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductCategoryMapper;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductCollectMapper;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductMapper;
@@ -93,29 +93,23 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
             ProductListVO productListVO = new ProductListVO();
             BeanUtils.copyProperties(product, productListVO);
             
-            // 处理图片字段 - 将JSON字符串转换为List<String>
             if (product.getImages() != null) {
                 try {
                     if (product.getImages() instanceof String) {
-                        // 如果是字符串，尝试解析为JSON数组
-                        productListVO.setImages(objectMapper.readValue((String) product.getImages(), 
+                        productListVO.setImages(objectMapper.readValue((String) product.getImages(),
                                 new TypeReference<List<String>>() {}));
                     } else if (product.getImages() instanceof List) {
-                        // 如果已经是List，直接转换
                         productListVO.setImages((List<String>) product.getImages());
                     } else {
-                        // 其他情况，设置为空列表
                         productListVO.setImages(new ArrayList<>());
                     }
                 } catch (Exception e) {
-                    // 解析失败，设置为空列表
                     productListVO.setImages(new ArrayList<>());
                 }
             } else {
                 productListVO.setImages(new ArrayList<>());
             }
             
-            // 设置第一张图片为缩略图
             if (productListVO.getImages() != null && !productListVO.getImages().isEmpty()) {
                 productListVO.setThumbnail(productListVO.getImages().get(0));
             }
@@ -145,19 +139,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
             ProductVO productVO = new ProductVO();
             BeanUtils.copyProperties(product, productVO);
             
-            // 处理图片字段 - 将JSON字符串转换为List<String>
             if (product.getImages() != null) {
                 try {
                     if (product.getImages() instanceof String) {
-                        // 如果是字符串，尝试解析为JSON数组
-                        List<String> imageList = objectMapper.readValue((String) product.getImages(), 
+                        List<String> imageList = objectMapper.readValue((String) product.getImages(),
                                 new TypeReference<List<String>>() {});
                         productVO.setImages(imageList);
                     } else if (product.getImages() instanceof List) {
-                        // 如果已经是List，直接转换
                         productVO.setImages((List<String>) product.getImages());
                     } else {
-                        // 其他情况，设置为空列表
                         productVO.setImages(new ArrayList<>());
                     }
                 } catch (Exception e) {
@@ -194,26 +184,22 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         if (product.getImages() != null) {
             try {
                 if (product.getImages() instanceof String) {
-                    // 如果是字符串，尝试解析为JSON数组
+                    //解析为JSON数组
                     List<String> imageList = objectMapper.readValue((String) product.getImages(), 
                             new TypeReference<List<String>>() {});
                     productDetailVO.setImages(imageList);
                 } else if (product.getImages() instanceof List) {
-                    // 如果已经是List，直接转换
                     productDetailVO.setImages((List<String>) product.getImages());
                 } else {
-                    // 其他情况，设置为空列表
                     productDetailVO.setImages(new ArrayList<>());
                 }
             } catch (Exception e) {
-                // 解析失败，设置为空列表
                 productDetailVO.setImages(new ArrayList<>());
             }
         } else {
             productDetailVO.setImages(new ArrayList<>());
         }
         
-        // 设置第一张图片为缩略图
         if (productDetailVO.getImages() != null && !productDetailVO.getImages().isEmpty()) {
             productDetailVO.setThumbnail(productDetailVO.getImages().get(0));
         }
@@ -312,23 +298,17 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         // 4.设置默认值
         product.setViewCount(0);
         product.setCollectCount(0);
-        product.setStatus("WAITING_AUDIT"); // 待审核状态
+        product.setStatus(ProductStatusEnum.WAITING_AUDIT); // 待审核状态
         
-        // 5.处理图片字段 - 将List<String>转换为JSON字符串
         if (product.getImages() != null) {
             try {
                 if (product.getImages() instanceof List) {
-                    // 如果是List，转换为JSON字符串
                     product.setImages(objectMapper.writeValueAsString(product.getImages()));
                 } else if (product.getImages() instanceof String) {
-                    // 如果已经是字符串，保持不变
-                    // 不做任何操作
                 } else {
-                    // 其他情况，设置为空数组
                     product.setImages("[]");
                 }
             } catch (Exception e) {
-                // 转换失败，设置为空数组
                 product.setImages("[]");
             }
         } else {

@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ThankYouNote;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ThankYouNote;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

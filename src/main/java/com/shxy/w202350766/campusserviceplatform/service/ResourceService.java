@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.Resource;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.Resource;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

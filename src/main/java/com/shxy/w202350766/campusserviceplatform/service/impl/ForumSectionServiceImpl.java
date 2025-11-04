@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ForumSection;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumSection;
 import com.shxy.w202350766.campusserviceplatform.service.ForumSectionService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ForumSectionMapper;
 import org.springframework.stereotype.Service;

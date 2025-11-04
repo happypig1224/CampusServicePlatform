@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ProductComment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductComment;
 
 /**
 * @author 33046

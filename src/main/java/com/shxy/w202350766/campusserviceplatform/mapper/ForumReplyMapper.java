@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.mapper;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ForumReply;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumReply;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

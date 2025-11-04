@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ErrandTask;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ErrandTask;
 import com.shxy.w202350766.campusserviceplatform.service.ErrandTaskService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ErrandTaskMapper;
 import org.springframework.stereotype.Service;

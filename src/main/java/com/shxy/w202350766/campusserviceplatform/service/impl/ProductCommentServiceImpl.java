@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductComment;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductComment;
 import com.shxy.w202350766.campusserviceplatform.service.ProductCommentService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductCommentMapper;
 import org.springframework.stereotype.Service;

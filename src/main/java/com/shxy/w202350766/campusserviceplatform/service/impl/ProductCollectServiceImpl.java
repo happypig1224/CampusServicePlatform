@@ -1,7 +1,7 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ProductCollect;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ProductCollect;
 import com.shxy.w202350766.campusserviceplatform.service.ProductCollectService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ProductCollectMapper;
 import org.springframework.stereotype.Service;

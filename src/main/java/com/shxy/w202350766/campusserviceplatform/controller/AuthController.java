@@ -1,9 +1,9 @@
 package com.shxy.w202350766.campusserviceplatform.controller;
 
-import com.shxy.w202350766.campusserviceplatform.domain.dto.UserDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.UserDTO;
 import com.shxy.w202350766.campusserviceplatform.service.UserService;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.UserVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.UserVO;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;

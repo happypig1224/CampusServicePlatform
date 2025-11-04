@@ -1,11 +1,10 @@
 package com.shxy.w202350766.campusserviceplatform.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shxy.w202350766.campusserviceplatform.domain.ForumReply;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumReplyDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ForumReply;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumReplyDTO;
 import com.shxy.w202350766.campusserviceplatform.service.ForumReplyService;
 import com.shxy.w202350766.campusserviceplatform.mapper.ForumReplyMapper;
-import com.shxy.w202350766.campusserviceplatform.utils.JwtUtils;
 import com.shxy.w202350766.campusserviceplatform.utils.Result;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;

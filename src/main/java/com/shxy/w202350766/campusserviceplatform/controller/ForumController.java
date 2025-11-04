@@ -1,14 +1,12 @@
 package com.shxy.w202350766.campusserviceplatform.controller;
 
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumPostDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumPostQueryDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumReplyDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumLikeDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.dto.ForumCollectDTO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumCategoryVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumPostVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumReplyVO;
-import com.shxy.w202350766.campusserviceplatform.domain.vo.ForumStatsVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumPostDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumPostQueryDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.dto.ForumReplyDTO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumCategoryVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumPostVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumReplyVO;
+import com.shxy.w202350766.campusserviceplatform.pojo.vo.ForumStatsVO;
 import com.shxy.w202350766.campusserviceplatform.service.ForumPostService;
 import com.shxy.w202350766.campusserviceplatform.service.ForumReplyService;
 import com.shxy.w202350766.campusserviceplatform.utils.JwtUtils;

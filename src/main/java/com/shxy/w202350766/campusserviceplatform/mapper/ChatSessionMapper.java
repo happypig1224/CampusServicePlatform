@@ -1,6 +1,6 @@
 package com.shxy.w202350766.campusserviceplatform.mapper;
 
-import com.shxy.w202350766.campusserviceplatform.domain.ChatSession;
+import com.shxy.w202350766.campusserviceplatform.pojo.entity.ChatSession;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
