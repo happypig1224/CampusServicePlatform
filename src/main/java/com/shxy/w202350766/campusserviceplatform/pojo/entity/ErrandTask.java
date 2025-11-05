@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Data;
 
@@ -26,9 +27,9 @@ public class ErrandTask {
     private Long userId;
 
     /**
-     * 任务类型
+     * 任务分类ID
      */
-    private Object type;
+    private Integer categoryId;
 
     /**
      * 任务标题
@@ -78,17 +79,22 @@ public class ErrandTask {
     /**
      * 接单时间
      */
-    private Date acceptTime;
+    private LocalDateTime acceptTime;
 
     /**
      * 完成时间
      */
-    private Date completeTime;
+    private LocalDateTime completeTime;
 
     /**
      * 完成证明图片
      */
     private Object proofImages;
+
+    /**
+     * 浏览次数
+     */
+    private Long viewCount;
 
     /**
      * 创建时间

@@ -242,13 +242,13 @@ CREATE TABLE `lost_and_found`
     `description`     TEXT                                   NOT NULL COMMENT '详细描述',
     `category_id`     BIGINT                                 NOT NULL COMMENT '物品分类ID',
     `lost_found_time` DATETIME                               NOT NULL COMMENT '丢失/拾到时间',
-    `reward`          DECIMAL(10,2) COMMENT '悬赏金额',
+    `reward`          DECIMAL(10, 2) COMMENT '悬赏金额',
     `location`        VARCHAR(200)                           NOT NULL COMMENT '地点',
     `images`          JSON COMMENT '图片列表',
     `urgency`         ENUM ('NORMAL', 'URGENT')              NOT NULL DEFAULT 'NORMAL' COMMENT '紧急程度',
     `contact_info`    VARCHAR(200)                           NOT NULL COMMENT '联系方式',
     `status`          ENUM ('PENDING', 'RESOLVED', 'CLOSED') NOT NULL DEFAULT 'PENDING' COMMENT '状态',
-    `view_count`      LONG            DEFAULT 0 COMMENT '浏览次数',
+    `view_count`      LONG                                            DEFAULT 0 COMMENT '浏览次数',
     `resolve_time`    DATETIME COMMENT '解决时间',
     `create_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`     DATETIME                               NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -295,27 +295,42 @@ CREATE TABLE `errand_task`
 (
     `id`            BIGINT                                                                        NOT NULL AUTO_INCREMENT COMMENT '任务ID',
     `user_id`       BIGINT                                                                        NOT NULL COMMENT '发布用户ID',
-    `type`          ENUM ('PARCEL', 'FOOD', 'PRINT', 'OTHER')                                     NOT NULL COMMENT '任务类型',
     `title`         VARCHAR(200)                                                                  NOT NULL COMMENT '任务标题',
     `description`   TEXT                                                                          NOT NULL COMMENT '任务描述',
     `reward`        DECIMAL(8, 2)                                                                 NOT NULL COMMENT '酬金（必须≥3元）',
     `location_from` VARCHAR(200)                                                                  NOT NULL COMMENT '起始地点',
     `location_to`   VARCHAR(200)                                                                  NOT NULL COMMENT '目的地',
     `deadline`      DATETIME                                                                      NOT NULL COMMENT '截止时间',
+    `category_id`   BIGINT                                                                        NOT NULL COMMENT '任务分类ID',
     `contact_info`  VARCHAR(200)                                                                  NOT NULL COMMENT '联系方式',
     `status`        ENUM ('PENDING', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'PAID') NOT NULL DEFAULT 'PENDING' COMMENT '状态',
     `acceptor_id`   BIGINT COMMENT '接单用户ID',
     `accept_time`   DATETIME COMMENT '接单时间',
     `complete_time` DATETIME COMMENT '完成时间',
     `proof_images`  JSON COMMENT '完成证明图片',
+    `view_count`    BIGINT                                                                                 DEFAULT 0 COMMENT '浏览次数',
     `create_time`   DATETIME                                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `update_time`   DATETIME                                                                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`acceptor_id`) REFERENCES `user` (`id`) ON DELETE SET NULL
+    FOREIGN KEY (`acceptor_id`) REFERENCES `user` (`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`category_id`) REFERENCES `errand_category` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci COMMENT ='跑腿任务表';
+-- 跑腿任务分类表
+CREATE TABLE `errand_category`
+(
+    `id`          BIGINT      NOT NULL AUTO_INCREMENT COMMENT '分类ID',
+    `name`        VARCHAR(50) NOT NULL COMMENT '分类名称',
+    `icon`        VARCHAR(100) COMMENT '图标URL',
+    `description` TEXT COMMENT '分类描述',
+    `task_count`  BIGINT               DEFAULT 0 COMMENT '任务数量',
+    `create_time` DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT ='跑腿任务分类表';
 
 -- 跑腿任务评价表
 CREATE TABLE `errand_review`

@@ -129,12 +129,8 @@
                         <!-- 可接任务 -->
                         <div class="tab-pane fade show active" id="available" role="tabpanel" aria-labelledby="available-tab">
                             <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
+                                <div class="card-header">
                                     <h5 class="card-title mb-0" id="availableTitle">可接任务</h5>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="onlyUrgent">
-                                        <label class="form-check-label" for="onlyUrgent">仅显示紧急任务</label>
-                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <!-- 任务列表 -->
@@ -260,22 +256,22 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="taskLocation" class="form-label">任务地点 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="taskLocation" name="location" required>
+                                    <label for="taskLocation" class="form-label">起始地点 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="taskLocation" name="locationFrom" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="taskDeadline" class="form-label">截止时间 <span class="text-danger">*</span></label>
-                                    <input type="datetime-local" class="form-control" id="taskDeadline" name="deadline" required>
+                                    <label for="taskDestination" class="form-label">目的地 <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="taskDestination" name="locationTo" required>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="taskContactName" class="form-label">联系人姓名 <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="taskContactName" name="contactName" required>
+                                    <label for="taskDeadline" class="form-label">截止时间 <span class="text-danger">*</span></label>
+                                    <input type="datetime-local" class="form-control" id="taskDeadline" name="deadline" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -283,22 +279,6 @@
                                     <label for="taskContactPhone" class="form-label">联系电话 <span class="text-danger">*</span></label>
                                     <input type="tel" class="form-control" id="taskContactPhone" name="contactPhone" required>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="taskIsUrgent" name="isUrgent">
-                                <label class="form-check-label" for="taskIsUrgent">
-                                    紧急任务 (加急处理)
-                                </label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="taskImages" class="form-label">任务图片</label>
-                            <input type="file" class="form-control" id="taskImages" multiple accept="image/*">
-                            <div class="form-text">上传相关图片有助于任务完成</div>
-                            <div id="taskImagePreview" class="mt-2 d-flex flex-wrap gap-2">
-                                <!-- 图片预览区域 -->
                             </div>
                         </div>
                     </form>
@@ -321,32 +301,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div id="taskImageCarousel" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner" id="taskCarouselInner">
-                                    <!-- 任务图片将通过JavaScript动态加载 -->
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#taskImageCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#taskImageCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h4 id="detailTitle"></h4>
                                 <div>
-                                    <span class="badge bg-${getCategoryColor(taskCategory)} me-2" id="detailCategory"></span>
-                                    <span class="badge bg-${getStatusColor(taskStatus)}" id="detailStatus"></span>
-                                    ${taskIsUrgent ? '<span class="badge bg-danger">紧急</span>' : ''}
+                                    <span class="badge bg-secondary me-2" id="detailCategory"></span>
+                                    <span class="badge bg-secondary" id="detailStatus"></span>
+                                    <span class="badge bg-danger d-none" id="detailUrgent">紧急</span>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <span class="h3 text-danger">¥${taskReward}</span>
+                                <span class="h3 text-danger" id="detailReward"></span>
                             </div>
                             <div class="mb-3">
                                 <p id="detailDescription"></p>
@@ -358,7 +323,7 @@
                                 <p><strong>联系电话：</strong><span id="detailContactPhone"></span></p>
                                 <p><strong>发布时间：</strong><span id="detailCreateTime"></span></p>
                                 <p><strong>浏览次数：</strong><span id="detailViewCount"></span></p>
-                                ${taskRunner ? `<p><strong>接单人：</strong><span id="detailRunner"></span></p>` : ''}
+                                <p><strong>接单人：</strong><span id="detailRunner"></span></p>
                             </div>
                             <div class="d-flex gap-2" id="detailActions">
                                 <!-- 操作按钮将通过JavaScript动态生成 -->
@@ -368,6 +333,36 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完成任务模态框 -->
+    <div class="modal fade" id="completeTaskModal" tabindex="-1" aria-labelledby="completeTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeTaskModalLabel">确认完成任务</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="completeTaskForm">
+                        <div class="mb-3">
+                            <label for="proofImages" class="form-label">上传完成证明图片 <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="proofImages" name="proofImages" multiple accept="image/*" required>
+                            <div class="form-text">请上传任务完成的证明图片，可以上传多张图片</div>
+                        </div>
+                        <div class="mb-3">
+                            <div id="imagePreview" class="d-flex flex-wrap gap-2">
+                                <!-- 图片预览区域 -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" id="submitCompleteTaskBtn">确认完成</button>
                 </div>
             </div>
         </div>
@@ -384,12 +379,46 @@
         let acceptedTaskPage = 1;
         let currentSort = 'latest';
         let currentKeyword = '';
-        let onlyUrgent = false;
         let taskCategory = null;
         let taskStatus = null;
         let taskIsUrgent = false;
         let taskRunner = null;
-        let uploadedTaskImages = [];
+        
+        // 格式化日期时间为后端API期望的格式
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return null;
+            
+            // 将datetime-local格式（2025-11-05T13:32）转换为后端期望的格式
+            // 后端期望格式可能是：yyyy-MM-dd HH:mm:ss
+            if (dateTimeString.includes('T')) {
+                // 替换T为空格，并添加秒部分
+                let formatted = dateTimeString.replace('T', ' ');
+                
+                // 检查是否缺少秒部分
+                if (formatted.split(':').length === 2) {
+                    formatted += ':00';
+                }
+                
+                return formatted;
+            }
+            
+            // 如果是其他格式，尝试转换为标准格式
+            const date = new Date(dateTimeString);
+            if (isNaN(date.getTime())) {
+                console.error('Invalid date format:', dateTimeString);
+                return null;
+            }
+            
+            // 转换为yyyy-MM-dd HH:mm:ss格式
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
         
         // 页面初始化函数
         function pageInit() {
@@ -437,13 +466,6 @@
                 loadCurrentTabTasks();
             });
             
-            // 仅显示紧急任务
-            document.getElementById('onlyUrgent').addEventListener('change', function() {
-                onlyUrgent = this.checked;
-                resetPagination();
-                loadCurrentTabTasks();
-            });
-            
             // 标签页切换
             document.querySelectorAll('#taskTabs button').forEach(tab => {
                 tab.addEventListener('shown.bs.tab', function(e) {
@@ -470,9 +492,6 @@
                 // 加载分类选项
                 loadCategoryOptions();
             });
-            
-            // 任务图片上传
-            document.getElementById('taskImages').addEventListener('change', handleImageUpload);
             
             // 提交任务
             document.getElementById('submitTaskBtn').addEventListener('click', submitTask);
@@ -504,8 +523,8 @@
         async function loadCategories() {
             try {
                 const categories = await get('/errand/categories');
-                renderCategories(categories);
-                renderCategoryOptions(categories);
+                renderCategories(categories.data);
+                renderCategoryOptions(categories.data);
             } catch (error) {
                 console.error('加载分类列表失败:', error);
                 document.getElementById('categoryList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
@@ -529,7 +548,7 @@
                     <a href="#" class="list-group-item list-group-item-action ${currentCategory === category.id ? 'active' : ''}" 
                        data-category-id="${category.id}">
                         <i class="bi ${category.icon || 'bi-tag'} me-2"></i>${category.name}
-                        <span class="badge bg-secondary rounded-pill float-end">${category.taskCount || 0}</span>
+                        <span class="badge bg-secondary rounded-pill float-end">${category.taskCount}</span>
                     </a>
                 `;
             });
@@ -577,7 +596,7 @@
                 const select = document.getElementById('taskCategory');
                 
                 let html = '<option value="">请选择分类</option>';
-                categories.forEach(category => {
+                categories.data.forEach(category => {
                     html += `<option value="${category.id}">${category.name}</option>`;
                 });
                 
@@ -591,7 +610,7 @@
         async function loadRunners() {
             try {
                 const runners = await get('/errand/runners', { limit: 10 });
-                renderRunners(runners);
+                renderRunners(runners.data);
             } catch (error) {
                 console.error('加载跑腿达人榜失败:', error);
                 document.getElementById('runnerList').innerHTML = '<div class="p-3 text-muted">加载失败</div>';
@@ -613,8 +632,8 @@
                         <div class="d-flex align-items-center">
                             <span class="badge bg-${index < 3 ? 'warning' : 'secondary'} rounded-circle me-2">${index + 1}</span>
                             <div>
-                                <h6 class="mb-0">${runner.nickname}</h6>
-                                <small class="text-muted">完成 ${runner.completedCount} 单</small>
+                                <h6 class="mb-0">${runner.username}</h6>
+                                <small class="text-muted">完成 ${runner.completedTasks} 单</small>
                             </div>
                         </div>
                         <div class="text-end">
@@ -673,9 +692,9 @@
                 
                 // 构建请求参数
                 const params = {
-                    page: availablePage,
-                    limit: 12,
-                    sort: currentSort
+                    pageNum: availablePage,
+                    pageSize: 12,
+                    sortBy: currentSort
                 };
                 
                 if (currentCategory) {
@@ -686,18 +705,20 @@
                     params.keyword = currentKeyword;
                 }
                 
-                if (onlyUrgent) {
-                    params.isUrgent = true;
-                }
-                
                 // 发送请求
                 const response = await get('/errand/tasks/available', params);
-                
-                // 渲染任务列表
-                renderTasks(response.tasks, 'availableTaskList');
-                
-                // 渲染分页
-                renderPagination(response.pagination, 'availablePagination');
+        
+        // 检查响应结构
+        if (response.code === 200 && response.data) {
+            // 渲染任务列表
+            renderTasks(response.data.tasks, 'availableTaskList');
+            
+            // 渲染分页
+            renderPagination(response.data, 'availablePagination');
+        } else {
+            showMessage(response.msg || '加载任务列表失败', 'danger');
+            document.getElementById('availableTaskList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+        }
                 
             } catch (error) {
                 console.error('加载可接任务失败:', error);
@@ -725,8 +746,8 @@
                 
                 // 构建请求参数
                 const params = {
-                    page: myTaskPage,
-                    limit: 12
+                    pageNum: myTaskPage,
+                    pageSize: 12
                 };
                 
                 if (currentKeyword) {
@@ -734,13 +755,19 @@
                 }
                 
                 // 发送请求
-                const response = await get('/errand/tasks/my', params);
+                const response = await get('/errand/my-published', params);
                 
-                // 渲染任务列表
-                renderTasks(response.tasks, 'myTaskList');
-                
-                // 渲染分页
-                renderPagination(response.pagination, 'myTaskPagination');
+                // 检查响应结构
+                if (response.code === 200 && response.data) {
+                    // 渲染任务列表
+                    renderTasks(response.data.tasks, 'myTaskList');
+                    
+                    // 渲染分页
+                    renderPagination(response.data, 'myTaskPagination');
+                } else {
+                    showMessage(response.msg || '加载我的任务失败', 'danger');
+                    document.getElementById('myTaskList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+                }
                 
             } catch (error) {
                 console.error('加载我的任务失败:', error);
@@ -768,8 +795,8 @@
                 
                 // 构建请求参数
                 const params = {
-                    page: acceptedTaskPage,
-                    limit: 12
+                    pageNum: acceptedTaskPage,
+                    pageSize: 12
                 };
                 
                 if (currentKeyword) {
@@ -777,13 +804,19 @@
                 }
                 
                 // 发送请求
-                const response = await get('/errand/tasks/accepted', params);
+                const response = await get('/errand/my-accepted', params);
                 
-                // 渲染任务列表
-                renderTasks(response.tasks, 'acceptedTaskList');
-                
-                // 渲染分页
-                renderPagination(response.pagination, 'acceptedTaskPagination');
+                // 检查响应结构
+                if (response.code === 200 && response.data) {
+                    // 渲染任务列表
+                    renderTasks(response.data.tasks, 'acceptedTaskList');
+                    
+                    // 渲染分页
+                    renderPagination(response.data, 'acceptedTaskPagination');
+                } else {
+                    showMessage(response.msg || '加载已接任务失败', 'danger');
+                    document.getElementById('acceptedTaskList').innerHTML = '<div class="col-12 text-center py-5 text-muted">加载失败，请稍后重试</div>';
+                }
                 
             } catch (error) {
                 console.error('加载已接任务失败:', error);
@@ -803,34 +836,33 @@
             container.innerHTML = tasks.map(task => `
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 task-item" data-task-id="${task.id}">
-                        <div class="task-image-container position-relative">
-                            ${task.images && task.images.length > 0 ? 
-                                `<img src="${task.images[0]}" class="card-img-top task-image" alt="${task.title}">` :
-                                `<img src="/images/default-task.jpg" class="card-img-top task-image" alt="${task.title}">`
-                            }
-                            <div class="position-absolute top-0 start-0 m-2">
-                                <span class="badge bg-${getCategoryColor(task.categoryId)}">${task.categoryName}</span>
-                            </div>
-                            <div class="position-absolute top-0 end-0 m-2">
-                                <span class="badge bg-${getStatusColor(task.status)}">${getStatusText(task.status)}</span>
-                                ${task.isUrgent ? '<span class="badge bg-danger ms-1">紧急</span>' : ''}
-                            </div>
-                        </div>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">${task.title}</h5>
-                            <p class="card-text text-truncate">${task.description}</p>
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">${task.title}</h5>
+                                <div class="d-flex flex-wrap gap-1">
+                                    <span class="badge bg-${getCategoryColor(task.categoryId)}">${task.categoryName}</span>
+                                    <span class="badge bg-${getStatusColor(task.status)}">${getStatusText(task.status)}</span>
+                                    ${task.isUrgent ? '<span class="badge bg-danger">紧急</span>' : ''}
+                                </div>
+                            </div>
+                            <p class="card-text">${task.description}</p>
                             <div class="mt-auto">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="h5 text-danger mb-0">¥${task.reward}</span>
                                     <small class="text-muted">${formatDate(task.createTime)}</small>
                                 </div>
-                                <div class="d-flex justify-content-between text-muted small">
-                                    <span><i class="bi bi-geo-alt me-1"></i>${task.location}</span>
+                                <div class="d-flex justify-content-between text-muted small mb-2">
+                                    <span><i class="bi bi-geo-alt me-1"></i>${task.locationFrom}</span>
                                     <span><i class="bi bi-clock me-1"></i>${formatDate(task.deadline)}</span>
                                 </div>
                                 ${containerId === 'availableTaskList' ? `
                                     <div class="mt-2">
                                         <button class="btn btn-sm btn-primary w-100 accept-btn" data-task-id="${task.id}">接单</button>
+                                    </div>
+                                ` : containerId === 'myTaskList' && task.status === 'CANCELLED' ? `
+                                    <div class="mt-2 d-flex gap-1">
+                                        <button class="btn btn-sm btn-success flex-fill restore-btn" data-task-id="${task.id}">恢复</button>
+                                        <button class="btn btn-sm btn-danger flex-fill delete-btn" data-task-id="${task.id}">删除</button>
                                     </div>
                                 ` : ''}
                             </div>
@@ -858,13 +890,31 @@
                     acceptTask(taskId);
                 });
             });
+            
+            // 绑定恢复按钮事件（仅在我的任务列表中且状态为已取消的任务）
+            container.querySelectorAll('.restore-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const taskId = this.dataset.taskId;
+                    restoreTask(taskId);
+                });
+            });
+            
+            // 绑定删除按钮事件（仅在我的任务列表中且状态为已取消的任务）
+            container.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const taskId = this.dataset.taskId;
+                    deleteTask(taskId);
+                });
+            });
         }
         
         // 渲染分页
         function renderPagination(pagination, containerId) {
             const container = document.getElementById(containerId);
             
-            if (!pagination || pagination.totalPages <= 1) {
+            if (!pagination || pagination.pages <= 1) {
                 container.innerHTML = '';
                 return;
             }
@@ -872,19 +922,19 @@
             let html = '';
             
             // 上一页
-            if (pagination.hasPrev) {
+            if (pagination.hasPrevious) {
                 html += `<li class="page-item">
-                    <a class="page-link" href="#" data-page="${pagination.prevPage}">上一页</a>
+                    <a class="page-link" href="#" data-page="${pagination.pageNum - 1}">上一页</a>
                 </li>`;
             }
             
             // 页码
-            for (let i = 1; i <= pagination.totalPages; i++) {
-                if (i === 1 || i === pagination.totalPages || (i >= pagination.currentPage - 2 && i <= pagination.currentPage + 2)) {
-                    html += `<li class="page-item ${i === pagination.currentPage ? 'active' : ''}">
+            for (let i = 1; i <= pagination.pages; i++) {
+                if (i === 1 || i === pagination.pages || (i >= pagination.pageNum - 2 && i <= pagination.pageNum + 2)) {
+                    html += `<li class="page-item ${i === pagination.pageNum ? 'active' : ''}">
                         <a class="page-link" href="#" data-page="${i}">${i}</a>
                     </li>`;
-                } else if (i === pagination.currentPage - 3 || i === pagination.currentPage + 3) {
+                } else if (i === pagination.pageNum - 3 || i === pagination.pageNum + 3) {
                     html += `<li class="page-item disabled"><a class="page-link" href="#">...</a></li>`;
                 }
             }
@@ -892,7 +942,7 @@
             // 下一页
             if (pagination.hasNext) {
                 html += `<li class="page-item">
-                    <a class="page-link" href="#" data-page="${pagination.nextPage}">下一页</a>
+                    <a class="page-link" href="#" data-page="${pagination.pageNum + 1}">下一页</a>
                 </li>`;
             }
             
@@ -923,143 +973,84 @@
             });
         }
         
-        // 处理图片上传
-        function handleImageUpload(event) {
-            const files = event.target.files;
-            const preview = document.getElementById('taskImagePreview');
-            
-            // 清空预览和已上传图片列表
-            preview.innerHTML = '';
-            uploadedTaskImages = [];
-            
-            // 处理每个文件
-            Array.from(files).forEach(file => {
-                // 检查文件类型
-                if (!file.type.startsWith('image/')) {
-                    showMessage('只能上传图片文件', 'warning');
-                    return;
-                }
-                
-                // 检查文件大小（限制为5MB）
-                if (file.size > 5 * 1024 * 1024) {
-                    showMessage('图片大小不能超过5MB', 'warning');
-                    return;
-                }
-                
-                // 创建预览
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const div = document.createElement('div');
-                    div.className = 'position-relative';
-                    div.innerHTML = `
-                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" data-index="${uploadedTaskImages.length}">
-                            <i class="bi bi-x"></i>
-                        </button>
-                    `;
-                    preview.appendChild(div);
-                    
-                    // 添加到已上传图片列表
-                    uploadedTaskImages.push({
-                        file: file,
-                        url: e.target.result
-                    });
-                    
-                    // 绑定删除按钮事件
-                    div.querySelector('button').addEventListener('click', function() {
-                        const index = parseInt(this.dataset.index);
-                        uploadedTaskImages.splice(index, 1);
-                        div.remove();
-                        
-                        // 更新剩余按钮的索引
-                        preview.querySelectorAll('button').forEach((btn, i) => {
-                            btn.dataset.index = i;
-                        });
-                    });
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-        
         // 提交任务
         async function submitTask() {
-            const form = document.getElementById('publishTaskForm');
-            const formData = serializeForm(form);
+            //分别构造参数
+            const categoryId = document.getElementById('taskCategory').value;
+            const title = document.getElementById('taskTitle').value;
+            const description = document.getElementById('taskDescription').value;
+            const reward = document.getElementById('taskReward').value;
+            const locationFrom = document.getElementById('taskLocation').value;
+            const locationTo = document.getElementById('taskDestination').value;
+            const deadline = document.getElementById('taskDeadline').value;
+            const contactPhone = document.getElementById('taskContactPhone').value;
             
             // 验证表单
-            if (!formData.categoryId) {
+            if (!categoryId) {
                 showMessage('请选择任务分类', 'warning');
                 return;
             }
             
-            if (!formData.title.trim()) {
+            if (!title.trim()) {
                 showMessage('请输入任务标题', 'warning');
                 return;
             }
             
-            if (!formData.description.trim()) {
+            if (!description.trim()) {
                 showMessage('请输入任务描述', 'warning');
                 return;
             }
             
-            if (!formData.reward || formData.reward <= 0) {
+            if (!reward || reward <= 0) {
                 showMessage('请输入有效的任务报酬', 'warning');
                 return;
             }
             
-            if (!formData.location.trim()) {
-                showMessage('请输入任务地点', 'warning');
+            if (!locationFrom || !locationFrom.trim()) {
+                showMessage('请输入起始地点', 'warning');
                 return;
             }
             
-            if (!formData.deadline) {
+            if (!locationTo || !locationTo.trim()) {
+                showMessage('请输入目的地', 'warning');
+                return;
+            }
+            
+            if (!deadline) {
                 showMessage('请选择截止时间', 'warning');
                 return;
             }
             
-            if (!formData.contactName.trim()) {
-                showMessage('请输入联系人姓名', 'warning');
-                return;
-            }
-            
-            if (!formData.contactPhone.trim()) {
+            if (!contactPhone.trim()) {
                 showMessage('请输入联系电话', 'warning');
                 return;
             }
             
+            // 显示加载状态
+            const submitBtn = document.getElementById('submitTaskBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '发布中...';
+            submitBtn.disabled = true;
             try {
-                // 显示加载状态
-                const submitBtn = document.getElementById('submitTaskBtn');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = '发布中...';
-                submitBtn.disabled = true;
-                
-                // 创建FormData对象用于上传文件
-                const taskFormData = new FormData();
-                
-                // 添加表单字段
-                Object.keys(formData).forEach(key => {
-                    if (formData[key] !== null && formData[key] !== undefined) {
-                        taskFormData.append(key, formData[key]);
-                    }
-                });
-                
-                // 添加图片文件
-                uploadedTaskImages.forEach(image => {
-                    taskFormData.append('images', image.file);
-                });
-                
+                let formData={
+                    categoryId:parseInt(categoryId),
+                    title:title.trim(),
+                    description:description.trim(),
+                    reward:parseFloat(reward),
+                    locationFrom:locationFrom.trim(),
+                    locationTo:locationTo.trim(),
+                    deadline:formatDateTime(deadline),
+                    contactInfo:contactPhone.trim()
+                }
                 // 发送请求
-                await post('/errand/tasks', taskFormData);
+                await post('/errand/tasks', formData);
                 
                 // 关闭模态框
                 const modal = bootstrap.Modal.getInstance(document.getElementById('publishTaskModal'));
                 modal.hide();
-                
+                let form=document.getElementById('publishTaskForm');
                 // 重置表单
                 form.reset();
-                document.getElementById('taskImagePreview').innerHTML = '';
-                uploadedTaskImages = [];
                 
                 // 显示成功消息
                 showMessage('任务发布成功', 'success');
@@ -1072,7 +1063,6 @@
                 showMessage(error.message || '发布任务失败，请稍后重试', 'danger');
             } finally {
                 // 恢复按钮状态
-                const submitBtn = document.getElementById('submitTaskBtn');
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             }
@@ -1082,32 +1072,58 @@
         async function showTaskDetail(taskId) {
             try {
                 // 获取任务详情
-                const task = await get(`/errand/tasks/${taskId}`);
+                const response = await get(`/errand/tasks/${taskId}`);
+                
+                // 检查响应结构
+                if (response.code !== 200 || !response.data) {
+                    throw new Error(response.msg || '获取任务详情失败');
+                }
+                
+                const task = response.data;
                 
                 // 保存全局变量
                 taskCategory = task.categoryId;
                 taskStatus = task.status;
-                taskIsUrgent = task.isUrgent;
-                taskRunner = task.runner;
+                taskRunner = task.acceptor;
+                taskIsUrgent = task.isUrgent || false;
                 
                 // 填充任务详情
                 document.getElementById('detailTitle').textContent = task.title;
                 document.getElementById('detailCategory').textContent = task.categoryName;
-                document.getElementById('detailStatus').textContent = getStatusText(task.status);
-                document.getElementById('detailDescription').textContent = task.description;
-                document.getElementById('detailLocation').textContent = task.location;
-                document.getElementById('detailDeadline').textContent = formatDate(task.deadline);
-                document.getElementById('detailContactName').textContent = task.contactName;
-                document.getElementById('detailContactPhone').textContent = task.contactPhone;
-                document.getElementById('detailCreateTime').textContent = formatDate(task.createTime);
-                document.getElementById('detailViewCount').textContent = formatNumber(task.viewCount);
+                document.getElementById('detailStatus').textContent = task.statusText || getStatusText(task.status);
+                document.getElementById('detailReward').textContent = `¥${task.reward}`;
+                document.getElementById('detailDescription').textContent = task.description || '未提供';
+                document.getElementById('detailLocation').textContent = task.locationFrom || '未提供';
+                document.getElementById('detailDeadline').textContent = formatDate(task.deadline) || '未提供';
+                document.getElementById('detailContactName').textContent = task.publisher.username || '未提供';
+                document.getElementById('detailContactPhone').textContent = task.contactInfo || '未提供';
+                document.getElementById('detailCreateTime').textContent = formatDate(task.createTime) || '未知';
+                document.getElementById('detailViewCount').textContent = task.viewCount || 0;
+                
+                // 设置接单人信息
+                const runnerElement = document.getElementById('detailRunner');
+                if (task.acceptor && task.acceptor.username) {
+                    runnerElement.textContent = task.acceptor.username;
+                    runnerElement.parentElement.style.display = 'block';
+                } else {
+                    runnerElement.parentElement.style.display = 'none';
+                }
+                
+                // 设置紧急标记
+                const urgentElement = document.getElementById('detailUrgent');
+                if (task.isUrgent) {
+                    urgentElement.classList.remove('d-none');
+                } else {
+                    urgentElement.classList.add('d-none');
+                }
                 
                 // 设置状态样式
                 const statusBadge = document.getElementById('detailStatus');
-                statusBadge.className = `badge bg-${getStatusColor(task.status)}`;
+                statusBadge.className = `badge bg-${task.statusColor || getStatusColor(task.status)}`;
                 
-                // 渲染任务图片
-                renderTaskImages(task.images);
+                // 设置分类样式
+                const categoryBadge = document.getElementById('detailCategory');
+                categoryBadge.className = `badge bg-${getCategoryColor(task.categoryId)} me-2`;
                 
                 // 设置操作按钮
                 const actionsContainer = document.getElementById('detailActions');
@@ -1115,7 +1131,7 @@
                 
                 // 根据任务状态和用户身份添加操作按钮
                 if (task.status === 'PENDING') {
-                    if (task.isOwner) {
+                    if (task.isOwnTask) {
                         // 任务发布者可以取消任务
                         actionsContainer.innerHTML = `
                             <button class="btn btn-danger" id="cancelTaskBtn">取消任务</button>
@@ -1134,25 +1150,44 @@
                             acceptTask(taskId);
                         };
                     }
-                } else if (task.status === 'ACCEPTED') {
-                    if (task.isOwner) {
-                        // 任务发布者可以确认完成
-                        actionsContainer.innerHTML = `
-                            <button class="btn btn-success" id="completeTaskBtn">确认完成</button>
-                        `;
-                        
+                } else if (task.status === 'ACCEPTED' || task.status === null) {
+                    let buttons = '';
+                    
+                    // 任务接收者可以确认完成
+                    if (task.canComplete) {
+                        buttons += `<button class="btn btn-success" id="completeTaskBtn">确认完成</button>`;
+                    }
+                    
+                    // 任务接收者或发布者可以取消/放弃任务
+                    if (task.canCancel) {
+                        if (task.isOwnTask) {
+                            // 发布者取消任务
+                            buttons += `<button class="btn btn-danger" id="cancelTaskBtn">取消任务</button>`;
+                        } else {
+                            // 接单人放弃任务
+                            buttons += `<button class="btn btn-warning" id="abandonTaskBtn">放弃任务</button>`;
+                        }
+                    }
+                    
+                    actionsContainer.innerHTML = buttons;
+                    
+                    // 绑定事件
+                    if (task.canComplete) {
                         document.getElementById('completeTaskBtn').onclick = function() {
                             completeTask(taskId);
                         };
-                    } else if (task.isRunner) {
-                        // 接单人可以放弃任务
-                        actionsContainer.innerHTML = `
-                            <button class="btn btn-warning" id="abandonTaskBtn">放弃任务</button>
-                        `;
-                        
-                        document.getElementById('abandonTaskBtn').onclick = function() {
-                            abandonTask(taskId);
-                        };
+                    }
+                    
+                    if (task.canCancel) {
+                        if (task.isOwnTask) {
+                            document.getElementById('cancelTaskBtn').onclick = function() {
+                                cancelTask(taskId);
+                            };
+                        } else {
+                            document.getElementById('abandonTaskBtn').onclick = function() {
+                                abandonTask(taskId);
+                            };
+                        }
                     }
                 }
                 
@@ -1164,26 +1199,6 @@
                 console.error('获取任务详情失败:', error);
                 showMessage('获取任务详情失败', 'danger');
             }
-        }
-        
-        // 渲染任务图片
-        function renderTaskImages(images) {
-            const container = document.getElementById('taskCarouselInner');
-            
-            if (!images || images.length === 0) {
-                container.innerHTML = `
-                    <div class="carousel-item active">
-                        <img src="/images/default-task.jpg" class="d-block w-100" alt="任务图片">
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = images.map((image, index) => `
-                <div class="carousel-item ${index === 0 ? 'active' : ''}">
-                    <img src="${image}" class="d-block w-100" alt="任务图片${index + 1}">
-                </div>
-            `).join('');
         }
         
         // 获取分类颜色
@@ -1278,31 +1293,84 @@
         }
         
         // 完成任务
-        async function completeTask(taskId) {
-            try {
-                // 确认完成
-                if (!confirm('确认任务已完成？确认后任务将标记为已完成，报酬将转给接单人。')) {
-                    return;
-                }
-                
-                // 发送完成请求
-                await post(`/errand/tasks/${taskId}/complete`);
-                
-                // 显示成功消息
-                showMessage('任务已标记为完成', 'success');
-                
-                // 重新加载任务列表
-                loadCurrentTabTasks();
-                
-                // 关闭详情模态框
-                const modal = bootstrap.Modal.getInstance(document.getElementById('taskDetailModal'));
-                if (modal) modal.hide();
-                
-            } catch (error) {
-                console.error('完成任务失败:', error);
-                showMessage(error.message || '完成任务失败', 'danger');
+    let currentTaskId = null;
+
+    function completeTask(taskId) {
+        currentTaskId = taskId;
+        // 重置表单和预览
+        document.getElementById('completeTaskForm').reset();
+        document.getElementById('imagePreview').innerHTML = '';
+        
+        // 显示模态框
+        const modal = new bootstrap.Modal(document.getElementById('completeTaskModal'));
+        modal.show();
+    }
+
+    // 图片预览功能
+    document.getElementById('proofImages').addEventListener('change', function(e) {
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = '';
+        
+        const files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '150px';
+                    img.style.maxHeight = '150px';
+                    img.className = 'img-thumbnail';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
             }
         }
+    });
+
+    // 提交完成任务
+    document.getElementById('submitCompleteTaskBtn').addEventListener('click', async function() {
+        const files = document.getElementById('proofImages').files;
+        
+        if (files.length === 0) {
+            showMessage('请至少上传一张完成证明图片！', 'warning');
+            return;
+        }
+
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+            formData.append('proofImages', files[i]);
+        }
+
+        try {
+            const response = await fetch(`/api/errand/tasks/${currentTaskId}/complete`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                showMessage('任务完成成功！', 'success');
+                // 关闭模态框
+                const modal = bootstrap.Modal.getInstance(document.getElementById('completeTaskModal'));
+                modal.hide();
+                loadCurrentTabTasks();
+                
+                // 关闭任务详情模态框
+                const detailModal = bootstrap.Modal.getInstance(document.getElementById('taskDetailModal'));
+                if (detailModal) detailModal.hide();
+            } else {
+                const error = await response.text();
+                showMessage('完成任务失败：' + error, 'danger');
+            }
+        } catch (error) {
+            console.error('完成任务失败：', error);
+            showMessage('完成任务失败，请检查网络连接', 'danger');
+        }
+    });
         
         // 放弃任务
         async function abandonTask(taskId) {
@@ -1328,6 +1396,52 @@
             } catch (error) {
                 console.error('放弃任务失败:', error);
                 showMessage(error.message || '放弃任务失败', 'danger');
+            }
+        }
+        
+        // 恢复任务（将已取消的任务重新设置为待接单状态）
+        async function restoreTask(taskId) {
+            try {
+                // 确认恢复
+                if (!confirm('确认恢复任务？任务将重新设置为待接单状态。')) {
+                    return;
+                }
+                
+                // 发送恢复请求
+                await post(`/errand/tasks/${taskId}/restore`);
+                
+                // 显示成功消息
+                showMessage('任务已恢复', 'success');
+                
+                // 重新加载任务列表
+                loadCurrentTabTasks();
+                
+            } catch (error) {
+                console.error('恢复任务失败:', error);
+                showMessage(error.message || '恢复任务失败', 'danger');
+            }
+        }
+        
+        // 删除任务（永久删除已取消的任务）
+        async function deleteTask(taskId) {
+            try {
+                // 确认删除
+                if (!confirm('确认删除任务？此操作不可撤销，任务将被永久删除。')) {
+                    return;
+                }
+                
+                // 发送删除请求
+                await del(`/errand/tasks/${taskId}`);
+                
+                // 显示成功消息
+                showMessage('任务已删除', 'success');
+                
+                // 重新加载任务列表
+                loadCurrentTabTasks();
+                
+            } catch (error) {
+                console.error('删除任务失败:', error);
+                showMessage(error.message || '删除任务失败', 'danger');
             }
         }
         

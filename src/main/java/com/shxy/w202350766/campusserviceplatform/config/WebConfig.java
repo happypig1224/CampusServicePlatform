@@ -32,7 +32,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/forum/sections","/api/forum/posts","/api/forum/posts/{postId}","/api/forum/posts/hot" ,
                         "/api/forum/replies/latest","/api/forum/stats",
                         "/api/forum/post/{postId}")
-                .excludePathPatterns("/api/lost-found/**");
+                .excludePathPatterns("/api/lost-found/**")
+                .excludePathPatterns("/api/market/categories","/api/market/products/hot","/api/market/products")
+                .excludePathPatterns("/api/errand/categories","/api/errand/tasks/available"
+                ,"/api/errand/runners","/api/errand/tasks/{taskId}");
     }
 
     @Override

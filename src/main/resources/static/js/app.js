@@ -331,6 +331,38 @@ function formatDate(dateString) {
     return date.toLocaleDateString();
 }
 
+// 格式化日期时间为后端API期望的格式
+function formatDateTime(dateTimeString) {
+    if (!dateTimeString) return null;
+    
+    // 如果已经是完整的时间格式，直接返回
+    if (dateTimeString.includes('T') && dateTimeString.includes(':')) {
+        // 检查是否缺少秒部分
+        if (dateTimeString.split(':').length === 2) {
+            // 添加秒部分
+            dateTimeString += ':00';
+        }
+        
+        // 检查是否缺少时区信息
+        if (!dateTimeString.includes('Z') && !dateTimeString.includes('+')) {
+            // 添加时区信息（使用本地时区）
+            const date = new Date(dateTimeString);
+            return date.toISOString();
+        }
+        
+        return dateTimeString;
+    }
+    
+    // 如果是其他格式，尝试转换为标准格式
+    const date = new Date(dateTimeString);
+    if (isNaN(date.getTime())) {
+        console.error('Invalid date format:', dateTimeString);
+        return null;
+    }
+    
+    return date.toISOString();
+}
+
 // 格式化数字（如：1000 -> 1k）
 function formatNumber(num) {
     if (num >= 10000) {
